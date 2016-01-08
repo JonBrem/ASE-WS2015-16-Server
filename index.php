@@ -37,10 +37,15 @@
 							<i class="fi-info" id="queue_control_info"></i>
 						</span>
 					</div>
-				</div>
+				</div> <!-- /.section_header -->
+
+				<div class="row section_body">
+					<ol id="queue_list">
+					</ol>
+				</div> <!-- /.section_body -->
 			</div>
 		</div>
-	</div>
+	</div> <!-- /.queue_area -->
 
 	<div class="history_area">
 		<div class="row">
@@ -60,5 +65,36 @@
 	<script>
 		$(document).foundation();
 	</script>
+
+	<script type="text/x-template" id="queue_item_template">
+		<li class="row <%= item.status %>" data-item-id="<%= item.id %>">
+			<div class="small-1 large-1 columns queue_item_number"><%= item.number %></div>
+			<div class="small-2 large-3 columns queue_item_image_wrapper"><img src="<%= item.preview_img %>" /></div>
+			<div class="small-5 large-5 columns queue_item_info">
+				<div class="row">
+					<div class="small-12 columns queue_item_title"><%= item.title %></div>
+				</div>
+				<div class="row">
+					<div class="small-12 columns queue_item_url"><%= item.url %></div>
+				</div>
+			</div>
+
+			<div class="small-4 large-3 columns queue_item_progress">
+				<%
+					if(item.status=="being_processed") {
+
+					} else if(item.status=="being_downloaded") {
+
+					} else {
+
+					}
+				%>
+			</div>
+			<div class="small-1 large-1 columns queue_item_cancel">
+				x
+			</div>
+		</li>
+	</script>
+
 </body>
 </html>
