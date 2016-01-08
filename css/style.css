@@ -17,9 +17,6 @@
 .section_controls {
 	font-size: 40px;
 	height: 100%;
-
-	width: auto;
-	float: right;
 }
 
 .section_control {
@@ -38,6 +35,7 @@
 .section_control:active {
 	background-color: #ccc;
 }
+
 
 /* queue_control colors */
 
@@ -71,4 +69,66 @@
 
 #queue_control_stop:active {
 	color: #cc1111;
+}
+
+
+/* queue list styles */
+
+#queue_list {
+	list-style-type: none;
+}
+
+#queue_list li {
+    border-top: 1px dashed #ccc;
+    border-bottom: 1px dashed #ccc;
+    padding-left: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 10px;
+    max-height: 140px;
+
+    overflow-y: hidden;
+}
+
+#queue_list li:first-child {
+	border-top: none;
+}
+
+#queue_list li:last-child {
+	border-bottom: none;
+}
+
+#queue_list li.ui-sortable-helper {
+	border-top: 1px dashed #ccc;
+	border-bottom: 1px dashed #ccc;
+}
+
+.queue_item_number {
+	margin: auto;
+	padding: 0;
+	font-size: 18px;
+	padding-left: 1%;
+	color: #666;
+	font-weight: bold;
+}
+
+#queue_list li .thumbnail {
+	max-height: 120px;
+}
+
+#queue_list li .thumbnail:hover, #queue_list li .thumbnail:active {
+	box-shadow: 0 0 0 1px rgba(10,10,10,.2);
+}
+
+.queue_item_title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+	
+.queue_item_title {
+	font-size: 110%;
+	font-weight: bold;
+	color: #666;
 }

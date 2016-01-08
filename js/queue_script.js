@@ -28,6 +28,9 @@ function onQueueDownload(e) {
 		$("#queue_list").append(_queueItemTemplate({item: e[i]}));
 	}
 
+	$("#queue_list").sortable({
+		axis: "y"
+	});
 }
 
 function onQueueDownloadError(e) {
