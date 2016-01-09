@@ -41,3 +41,6 @@ function onQueueDownloadError(e) {
 function QueueItem() {
 
 }
+
+// call basic function
+updateQueue();
