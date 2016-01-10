@@ -96,6 +96,10 @@
 	border-top: none;
 }
 
+#queue_list li.being_processed {
+	background-color: #e0e0e0;
+}
+
 #queue_list li:last-child {
 	border-bottom: none;
 }
@@ -152,5 +156,47 @@
 .queue_item_status small {
 	color: #999;
 	display: block;
+}
+
+.being_processed .queue_item_status small {
+	color: #333;
+	display: block;
+}
+
+.being_processed .queue_item_status i {
+	font-size: 40px;
+}
+
+
+/* history styles */
+
+#history_list {
+	list-style-type: none;
+}
+
+.history_item_tags .label {
+	display: inline-block;
+	padding: 8px;
+	border-radius: 4px;
+}
+
+.history_item_tags .label.secondary:hover {
+	background-color: #333;
+	cursor: pointer;
+}
+
+.history_item_tags .label.secondary:active {
+	background-color: #111;
+	cursor: pointer;
+}
+
+.history_item_tags .label.success:hover {
+	background-color: #19b954;
+	cursor: pointer;
+}
+
+.history_item_tags .label.success:active {
+	background-color: #00a054;
+	cursor: pointer;
 }
 
