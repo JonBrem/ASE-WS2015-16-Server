@@ -89,7 +89,9 @@
 				<%
 					if(item.status=="being_processed") {
 
-					} else if(item.status=="being_downloaded") {
+					} else if(item.status=="downloading") {
+
+					} else if(item.status=="downloaded") {
 
 					} else {
 

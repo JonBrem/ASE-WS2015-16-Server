@@ -20,11 +20,7 @@
 	}
 
 	try {
-		error_log("Pre-Download!");
-
 		downloadFile($_GET["video_url"], $_GET["download_to"]);
-
-		error_log("POST-DOWNLOAD!!!");
 
 		$server = "localhost";
 		$username = "root";
