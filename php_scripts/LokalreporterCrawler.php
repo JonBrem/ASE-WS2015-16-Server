@@ -1,6 +1,6 @@
 <?php
 require_once('lib/simple_html_dom.php');
-
+require_once("dbConnection.php");
 
 
 class LokalreporterCrawler {
@@ -51,12 +51,7 @@ class LokalreporterCrawler {
 			var_dump($mediaObject);
 			echo "</pre>";
 
-			$server = "localhost";
-			$username = "root";
-			$pw = "";
-			$dbname = "ase_text_in_images";
-
-			$conn = new mysqli($server, $username, $pw, $dbname);
+			$conn = getDBConnection();
 			if(!$conn->connect_error) {
 				$sql = "INSERT INTO media (title, url, preview_image, video_url, status) VALUES (\"" .
 					$mediaObject["title"] ."\",\"" . $mediaObject["url"] . "\", \"" . $mediaObject["image"] . "\",\"" . $mediaObject["video"] . "\",\"crawled\");";

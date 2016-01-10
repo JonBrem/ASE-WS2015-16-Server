@@ -1,4 +1,5 @@
 <?php 
+	require_once("dbConnection.php");
 
 	function downloadFile($url, $path) {
 	    $newfname = $path;
@@ -22,13 +23,7 @@
 	try {
 		downloadFile($_GET["video_url"], $_GET["download_to"]);
 
-		$server = "localhost";
-		$username = "root";
-		$pw = "";
-		$dbname = "ase_text_in_images";
-
-		$conn = new mysqli($server, $username, $pw, $dbname);
-
+		$conn = getDBConnection();
 		$conn->query("UPDATE queue SET status=\"downloaded\" WHERE media_id=$_GET[item_id];");
 
 		$conn->close();

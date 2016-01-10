@@ -1,19 +1,15 @@
 <?php
 	/* this should be running continuously. */
+	require_once("dbConnection.php");
 
 	class MediaTextRecognitionLogic {
-
-		private	$server = "localhost";
-		private	$username = "root";
-		private	$pw = "";
-		private	$dbname = "ase_text_in_images";
 
 		public function run() {
 			$lastRunTime = $this->readTime();
 			if($this->checkTimeDifference($lastRunTime)) {
 				$this->writeTime();
 
-				$conn = new mysqli($this->server, $this->username, $this->pw, $this->dbname);
+				$conn = getDBConnection();
 				if(!$conn->connect_error) {
 					$this->checkCurrentTextRecognition($conn);
 					$this->checkQueue($conn);
@@ -55,9 +51,13 @@
 
 		private function checkQueueDownloads($conn) {
 			$sqlResult = $conn->query("SELECT `queue`.`media_id`, `media`.`video_url` FROM queue LEFT JOIN media ON `queue`.`media_id` = `media`.`id` WHERE (`position`<=3 AND `queue`.`status`='in_queue')");
+			$this->createVideoDownloadsDirIfNotExists();		
+
 			if($sqlResult->num_rows > 0) {
 				while($row = $sqlResult->fetch_assoc()) {
 					if($conn->query("UPDATE queue SET `status`=\"downloading\" WHERE `media_id` = $row[media_id]")) {
+
+
 						$this->downloadInBackground($row["media_id"], $row["video_url"], "/opt/lampp/htdocs/ase_server/video_downloads/$row[media_id].mp4");
 					}
 				}
@@ -144,6 +144,15 @@
 			return true;
 		}
 
+		private function createVideoDownloadsDirIfNotExists() {
+			$videoDownloadPath = realpath(dirname(__FILE__));
+			$videoDownloadPath .= "/../video_downloads";
+
+			if(!file_exists($videoDownloadPath)) {
+				mkdir($videoDownloadPath, 0777);
+			}
+
+		}
 
 	}
 

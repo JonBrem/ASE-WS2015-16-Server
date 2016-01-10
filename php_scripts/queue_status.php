@@ -1,12 +1,7 @@
 <?php
-	
-	
-	$server = "localhost";
-	$username = "root";
-	$pw = "";
-	$dbname = "ase_text_in_images";
+	require_once("dbConnection.php");
 
-	$conn = new mysqli($server, $username, $pw, $dbname);
+	$conn = getDBConnection();
 
 	$queryResults = $conn->query("SELECT media.id,media.title,media.url,media.preview_image,queue.status FROM queue LEFT JOIN media ON queue.media_id=media.id ORDER BY queue.position");
 
@@ -25,5 +20,5 @@
 	}
 
 	echo json_encode($queue);
-
+	$conn->close();
 ?>

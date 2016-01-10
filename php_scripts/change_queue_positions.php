@@ -1,14 +1,10 @@
 <?php
-	
+	require_once("dbConnection.php");
+
 	$newPositions = $_GET["positions"];
 	$newPositions = json_decode($newPositions);
 
-	$server = "localhost";
-	$username = "root";
-	$pw = "";
-	$dbname = "ase_text_in_images";
-
-	$conn = new mysqli($server, $username, $pw, $dbname);
+	$conn = getDBConnection();
 
 	for($i = 0; $i < sizeof($newPositions); $i++) {
 		$position = $newPositions[$i][1];
@@ -17,5 +13,5 @@
 	}
 
 	echo json_encode(array("status" => "OK"));
-
+	$conn->close();
 ?>
