@@ -76,6 +76,8 @@
 
 #queue_list {
 	list-style-type: none;
+	overflow-y: scroll;
+	max-height: 500px;
 }
 
 #queue_list li {
@@ -132,3 +134,23 @@
 	font-weight: bold;
 	color: #666;
 }
+
+.queue_item_status {
+	text-align: center;
+}
+
+.queue_item_downloading i {
+	font-size: 30px;
+	color: #909033;
+}
+
+.queue_item_downloaded i {
+	font-size: 30px;
+	color: #009000;
+}
+
+.queue_item_status small {
+	color: #999;
+	display: block;
+}
+

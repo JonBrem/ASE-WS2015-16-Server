@@ -73,7 +73,7 @@
 	</script>
 
 	<script type="text/x-template" id="queue_item_template">
-		<li class="row align-middle <%= item.status %>" data-item-id="<%= item.id %>">
+		<li class="queue_list_item row align-middle <%= item.status %>" data-item-id="<%= item.id %>">
 			<div class="small-1 large-1 columns queue_item_number"><%= item.number+1 %></div>
 			<div class="small-2 large-3 columns queue_item_image_wrapper"><img class="thumbnail" src="<%= item.preview_img %>" /></div>
 			<div class="small-5 large-5 columns queue_item_info">
@@ -85,14 +85,24 @@
 				</div>
 			</div>
 
-			<div class="small-4 large-3 columns queue_item_progress">
+			<div class="small-3 large-2 columns queue_item_progress">
 				<%
 					if(item.status=="being_processed") {
 
-					} else if(item.status=="downloading") {
-
+					} else if(item.status=="downloading") {						
+						%>
+							<div class="queue_item_status queue_item_downloading">
+								<i class="fi-download"></i>
+								<small>Video-Download läuft</small>
+							</div>
+						<%
 					} else if(item.status=="downloaded") {
-
+						%>
+							<div class="queue_item_status queue_item_downloaded">
+								<i class="fi-download"></i>
+								<small>Video-Download vollständig</small>
+							</div>
+						<%
 					} else {
 
 					}
