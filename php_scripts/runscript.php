@@ -1,6 +1,7 @@
 <?php
 	/* this should be running continuously. */
-	require_once("dbConnection.php");
+	require_once("util/db_connection.php");
+	require_once("util/status_codes.php");
 
 	class MediaTextRecognitionLogic {
 
@@ -32,7 +33,114 @@
 		 * whether or not a new text recognition needs to be started.
 		 */
 		private function checkCurrentTextRecognition($conn) {
-			/* @TODO */
+			// todo make this more of an "if this then that"-pipeline
+			$this->checkIfSegmentingVideoFinished($conn);
+			$this->checkIfParsingFinished($conn);
+			$this->checkIfFindingTagsFinished($conn);
+
+			if(!$this->currentlyProcessingImage($conn)) {
+				$item = $this->getItemToProcess($conn);
+				if($item !== false) {
+					$this->segmentVideo($item, $conn);
+				}
+			}
+		}
+
+		private function checkIfParsingFinished($conn) {
+			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_FINISHED_PROCESSING ."\"");
+			if($sqlResult->num_rows > 0) {
+				$row = $sqlResult->fetch_assoc();
+				$this->findAndStoreTagsFromRecognizedText($row['media_id'], $conn);
+			}
+		}
+
+		private function checkIfSegmentingVideoFinished($conn) {
+			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_FINISHED_SEGMENTING_VIDEO ."\"");
+			if($sqlResult->num_rows > 0) {
+				$row = $sqlResult->fetch_assoc();
+				$this->parseVideo($row['media_id'], $conn);
+			}
+		}
+
+		private function checkIfFindingTagsFinished($conn) {
+			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_READY_FOR_HISTORY ."\"");
+			if($sqlResult->num_rows > 0) {
+				$row = $sqlResult->fetch_assoc();
+				$this->moveToHistory($row['media_id'], $conn);
+			}
+		}
+
+		private function findAndStoreTagsFromRecognizedText($mediaID, $conn) {
+			
+		}
+
+		private function parseVideo($mediaID, $conn) {
+			$parseVideoScript = $this->getPhpScriptsPathOnServer() . "runscript_subroutines/parse_video.php";
+			$outputFilePath = $this->getAbsolutePathOnServer() . "/../video_downloads/output_$mediaID.json";
+			$videosFolder = $this->getAbsolutePathOnServer() . "/../video_downloads";
+			$segmentedVideoPath = "$videosFolder/video_segments";
+
+			curl_request_async(
+				$parseVideoScript, 
+				array(
+					"segmented_video_path" => $segmentedVideoPath,
+					"output_file" => $outputFilePath,
+					"media_id" => $mediaID 
+					), 
+				"GET");
+		}
+
+		private function moveToHistory($mediaID, $conn) {
+			// @todo
+		}
+
+		private function currentlyProcessingImage($conn) {
+			$condition = " `queue`.`status`=\"" . STATUS_BEING_PROCESSED . "\" OR"
+						 . " `queue`.`status`=\"" . STATUS_FINISHED_PROCESSING . "\" OR"
+						 . " `queue`.`status`=\"" . STATUS_LOOKING_FOR_TAGS . "\" OR"
+						 . " `queue`.`status`=\"" . STATUS_SEGMENTING_VIDEO . "\" OR"
+						 . " `queue`.`status`=\"" . STATUS_FINISHED_SEGMENTING_VIDEO . "\"";
+
+			$sqlResult = $conn->query("SELECT `queue`.`id` FROM queue WHERE $condition");
+
+			return ($sqlResult->num_rows > 0);
+		}
+
+		private function getItemToProcess($conn) {
+			$sqlResult = $conn->query("SELECT `queue`.`id` AS queue_id, `media`.`id` FROM queue LEFT JOIN media" 
+				. " ON `queue`.`media_id`=`media`.`id` WHERE `queue`.`status`=\"" . STATUS_DOWNLOADED . "\" AND `queue`.`position`=1");
+
+			if($sqlResult->num_rows > 0) {
+				$row = $sqlResult->fetch_assoc();
+ 				$item = array("media_id" => $row["id"], "queue_id" => $row["queue_id"]);
+				return $item;
+			} else {
+				return false;
+			}
+		}
+
+		/** 
+		 * @param $item
+		 *		php array; must have keys "media_id" and "queue_id".
+		 */
+		private function segmentVideo($item) {
+			$segmentVideoScript = $this->getPhpScriptsPathOnServer() . "runscript_subroutines/segment_video.php";
+			
+			$videosFolder = $this->getAbsolutePathOnServer() . "/../video_downloads";
+
+			$videoFilePath = "$videosFolder/$item[media_id].mp4"; // @todo this should probably be stored in sql & loaded from there
+			$segmentedVideoPath = "$videosFolder/video_segments";
+
+			curl_request_async(
+				$segmentVideoScript,
+				array(
+					"media_id" => $item["media_id"],
+					"queue_id" => $item["queue_id"],
+					"video_file_path" => $videoFilePath,
+					"segmented_video_path" => $segmentedVideoPath
+					),
+				"GET"
+			);
 		}
 
 		/**
@@ -50,25 +158,22 @@
 		}
 
 		private function checkQueueDownloads($conn) {
-			$sqlResult = $conn->query("SELECT `queue`.`media_id`, `media`.`video_url` FROM queue LEFT JOIN media ON `queue`.`media_id` = `media`.`id` WHERE (`position`<=3 AND `queue`.`status`='in_queue')");
+			$sqlResult = $conn->query("SELECT `queue`.`media_id`, `media`.`video_url` FROM queue LEFT JOIN media ON `queue`.`media_id` = `media`.`id` WHERE (`position`<=3 AND `queue`.`status`='". STATUS_IN_QUEUE ."')");
 			$this->createVideoDownloadsDirIfNotExists();		
 
 			if($sqlResult->num_rows > 0) {
 				while($row = $sqlResult->fetch_assoc()) {
-					if($conn->query("UPDATE queue SET `status`=\"downloading\" WHERE `media_id` = $row[media_id]")) {
+					if($conn->query("UPDATE queue SET `status`=\"". STATUS_DOWNLOADING ."\" WHERE `media_id` = $row[media_id]")) {
 
-
-						$this->downloadInBackground($row["media_id"], $row["video_url"], "/opt/lampp/htdocs/ase_server/video_downloads/$row[media_id].mp4");
+						// @todo update path!!!
+						$this->downloadInBackground($row["media_id"], $row["video_url"], $this->getAbsolutePathOnServer() . "/../video_downloads/$row[media_id].mp4");
 					}
 				}
 			}
 		}
 
 		private function downloadInBackground($mediaId, $video, $downloadTo) {
-			$fileName = pathinfo(__FILE__, PATHINFO_FILENAME) . "php";
-
-			$currentScriptOnServer = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-			$videoDonwloadScript = substr($currentScriptOnServer, 0, strlen($currentScriptOnServer) - strlen($fileName) - 1) . "video_download_script.php";
+			$videoDonwloadScript = $this->getPhpScriptsPathOnServer() . "runscript_subroutines/video_download.php";
 			curl_request_async($videoDonwloadScript, array(
 					"video_url" => $video,
 					"download_to" => $downloadTo,
@@ -76,13 +181,14 @@
 				), "GET");
 		}
 
-
-		private function readTime() {
-			return 0;
+		private function getPhpScriptsPathOnServer() {
+			$fileName = pathinfo(__FILE__, PATHINFO_FILENAME) . "php";
+			$currentScriptOnServer = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			return substr($currentScriptOnServer, 0, strlen($currentScriptOnServer) - strlen($fileName) - 1);
 		}
 
-		private function writeTime() {
-
+		private function getAbsolutePathOnServer() {
+			return realpath(dirname(__FILE__));
 		}
 
 		private function getNumOfItemsInQueue($conn) {
@@ -96,7 +202,7 @@
 		}
 
 		private function getNextItemsForQueue($conn, $howMany, $positionOffset) {
-			$sqlResult = $conn->query("SELECT id FROM media WHERE (status='crawled') ORDER BY ID ASC LIMIT $howMany");
+			$sqlResult = $conn->query("SELECT id FROM media WHERE (status='". STATUS_CRAWLED ."') ORDER BY ID ASC LIMIT $howMany");
 			$nextItems = array();
 
 			if($sqlResult->num_rows > 0) {
@@ -125,7 +231,7 @@
 						$items[$i]["position"] . ")";
 					if($i != sizeof($items) - 1) $itemString .= ",";
 
-					if($conn->query("UPDATE media SET `status`='in_queue' WHERE (`id`=" . $items[$i]["media_id"] . ");") === TRUE) {
+					if($conn->query("UPDATE media SET `status`='". STATUS_IN_QUEUE ."' WHERE (`id`=" . $items[$i]["media_id"] . ");") === TRUE) {
 						$insertString .= $itemString;
 					}
 				}
@@ -136,13 +242,6 @@
 			}
 		}
 
-		/**
-		 * Checks if enough time has passed for the script to run again.
-		 * Avoids having multiple run scripts be running at the same time.
-		 */
-		private function checkTimeDifference($lastRunTime) {
-			return true;
-		}
 
 		private function createVideoDownloadsDirIfNotExists() {
 			$videoDownloadPath = realpath(dirname(__FILE__));
@@ -152,6 +251,24 @@
 				mkdir($videoDownloadPath, 0777);
 			}
 
+		}
+
+
+		// @TODO
+		private function readTime() {
+			return 0;
+		}
+
+		private function writeTime() {
+
+		}
+		
+		/**
+		 * Checks if enough time has passed for the script to run again.
+		 * Avoids having multiple run scripts be running at the same time.
+		 */
+		private function checkTimeDifference($lastRunTime) {
+			return true;
 		}
 
 	}

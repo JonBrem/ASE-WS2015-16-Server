@@ -1,9 +1,10 @@
 <?php
-	require_once("dbConnection.php");
+	require_once("../util/db_connection.php");
+	require_once("../util/status_codes.php");
 
 	$conn = getDBConnection();
 
-	$sqlResult = $conn->query("SELECT * FROM media WHERE status=\"history\"");
+	$sqlResult = $conn->query("SELECT * FROM media WHERE status=\"" . STATUS_HISTORY . "\"");
 
 	// build media ID string for later, set up media items array
 	// array indizes = media id (so we don't have so many loops later :) )

@@ -11,7 +11,7 @@ function init_history() {
 
 function downloadHistory() {
 	$.ajax({
-		url: 'php_scripts/history_items.php',
+		url: 'php_scripts/get_items/get_history.php',
 		dataType: 'json',
 		success: onHistoryDownloaded,
 		error: function(e) {console.log("error", e);}

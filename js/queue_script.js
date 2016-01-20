@@ -41,7 +41,7 @@ function init_queue() {
 
 function updateQueue() {
 	$.ajax({
-		url: 'php_scripts/queue_status.php',
+		url: 'php_scripts/get_items/get_queue.php',
 		dataType: "json",
 		success: onQueueDownload,
 		error: onQueueDownloadError
