@@ -1,2 +1,3 @@
 /video_downloads/*
 /vendor/*
+composer.lock

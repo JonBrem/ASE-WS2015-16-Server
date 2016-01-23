@@ -25,13 +25,23 @@
 	$conn->query("UPDATE queue SET status=\"" . STATUS_SEGMENTING_VIDEO . "\" WHERE id=$queueID");
 
 	
-	$ffprobe = FFMpeg\FFProbe::create();
+	$ffprobe = FFMpeg\FFProbe::create(
+		array(
+			'ffmpeg.binaries' => "/usr/local/Cellar/ffmpeg/2.8.5/bin/ffmpeg",
+			'ffprobe.binaries' => "/usr/local/Cellar/ffmpeg/2.8.5/bin/ffprobe"
+		)
+	);
 	$videoDuration = $ffprobe
 	    ->format($videoFilePath) // extracts file informations
 	    ->get('duration');             // returns the duration property
 
 
-	$ffmpeg = FFMpeg\FFMpeg::create();
+	$ffmpeg = FFMpeg\FFMpeg::create(
+		array(
+			'ffmpeg.binaries' => "/usr/local/Cellar/ffmpeg/2.8.5/bin/ffmpeg",
+			'ffprobe.binaries' => "/usr/local/Cellar/ffmpeg/2.8.5/bin/ffprobe"
+		)
+	);
 	$video = $ffmpeg->open($videoFilePath);
 
 	// 0.2: analyze 5 FPS

@@ -4,7 +4,7 @@
 
 
 	// @todo: make SQL var that users can edit
-	$execPath = "/home/jon/.CLion12/system/cmake/generated/82e833ec/82e833ec/Debug/ASE-WS2015-16";
+	$execPath = "/Applications/XAMPP/xamppfiles/bin/ASE-WS2015-16";
 
 	$folder = $_GET['segmented_video_path'];
 	$jsonOutputPath = $_GET['output_file'];
