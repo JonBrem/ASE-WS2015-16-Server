@@ -6665,6 +6665,7 @@ Foundation.plugin(ResponsiveToggle, 'ResponsiveToggle');
    * @private
    */
   Sticky.prototype._removeSticky = function(isTop){
+    if(!isTop) return;
     var stickTo = this.options.stickTo,
         stickToTop = stickTo === 'top',
         css = {},

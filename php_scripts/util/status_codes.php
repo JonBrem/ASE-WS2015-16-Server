@@ -29,8 +29,14 @@
 	// follows after "STATUS_BEING_PROCESSED"
 	define("STATUS_FINISHED_PROCESSING", "finished_processing"); // FOR "queue" TABLE
 
-	// c++ executable is done with the file, but PHP still needs to select tags from the recognized words.
+	// c++ executable is done with the file, but JAVA still needs to select tags from the recognized words.
 	// follows after STATUS_FINISHED_PROCESSING
+	define("STATUS_EVALUATING_WORDS", "evaluating_words"); // FOR "queue" TABLE
+
+
+	define("STATUS_FINISHED_EVALUATING_WORDS", "finished_evaluating_words"); // FOR "queue" TABLE
+
+
 	define("STATUS_LOOKING_FOR_TAGS", "looking_for_tags"); // FOR "queue" TABLE
 
 	// tags were found, item is ready for history

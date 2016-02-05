@@ -20,8 +20,6 @@
 				}
 
 				$conn->close();
-				// sleep(2);
-				// $this->run();
 			} else { # not enough time has passed for this to run again.
 				// do nothing, let this end.
 			}
@@ -36,6 +34,7 @@
 			// todo make this more of an "if this then that"-pipeline
 			$this->checkIfSegmentingVideoFinished($conn);
 			$this->checkIfParsingFinished($conn);
+			$this->checkIfEvaluationFinished($conn);
 			$this->checkIfFindingTagsFinished($conn);
 
 			if(!$this->currentlyProcessingImage($conn)) {
@@ -50,7 +49,15 @@
 			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_FINISHED_PROCESSING ."\"");
 			if($sqlResult->num_rows > 0) {
 				$row = $sqlResult->fetch_assoc();
-				$this->findAndStoreTagsFromRecognizedText($row['media_id'], $conn);
+				$this->evaluateRecongizedWords($row['media_id'], $conn);
+			}
+		}
+
+		private function checkIfEvaluationFinished($conn) {
+			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_FINISHED_EVALUATING_WORDS ."\"");
+			if($sqlResult->num_rows > 0) {
+				$row = $sqlResult->fetch_assoc();
+				// $this->findTags($conn);
 			}
 		}
 
@@ -70,8 +77,23 @@
 			}
 		}
 
-		private function findAndStoreTagsFromRecognizedText($mediaID, $conn) {
-			
+		private function evaluateRecongizedWords($mediaID, $conn) {
+			$evaluationScript = $this->getPhpScriptsPathOnServer() . "runscript_subroutines/evaluate_words.php";
+			$parseOutput = $this->getAbsolutePathOnServer() . "/../video_downloads/output_$mediaID.json";
+			$javaExec = $this->getAbsolutePathOnServer() . "/../java_tool/ASE-WS2016-16-WordValidator.jar";
+			$javaOutput = $this->getAbsolutePathOnServer() . "/../video_downloads/java_output_$mediaID.json";
+			$trainingFolder = $this->getAbsolutePathOnServer() . "/../java_tool/wiki_texts";
+			curl_request_async(
+				$evaluationScript,
+				array(
+					"media_id" => $mediaID, 
+					"json_file" => $parseOutput,
+					"output_file" => $javaOutput,
+					"java_exec_path" => $javaExec,
+					"training_folder" => $trainingFolder
+					),
+				"GET"
+			);
 		}
 
 		private function parseVideo($mediaID, $conn) {
@@ -88,6 +110,20 @@
 					"media_id" => $mediaID 
 					), 
 				"GET");
+		}
+
+		private function findTags($mediaID, $conn) {
+			$findTagsScript = $this->getPhpScriptsPathOnServer() . "runscript_subroutines/find_tags.php";
+			$fileName = $this->getAbsolutePathOnServer() . "/../video_downloads/java_output_$mediaID.json";
+
+			curl_request_async(
+				$findTagsScript, 
+				array(
+					"file_name" => $fileName,
+					"media_id" => $mediaID 
+					), 
+				"GET");
+
 		}
 
 		private function moveToHistory($mediaID, $conn) {

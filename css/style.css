@@ -1,12 +1,58 @@
+* {
+	color: #f0f0f0;
+}
+
+body {
+	background: #000;
+}
+
+.title_area {
+	background-color: #202020;
+	margin-bottom: 20px;
+}
+
+/* main_nav */
+#main_nav_wrapper {
+	z-index: 10;
+	background-color: #202020;
+	padding-top: 10px;
+	padding-bottom: 5px;
+}
+
+#main_nav h2 {
+	font-size: 30px;
+	text-align: center;
+
+	letter-spacing: 4px;
+	color: #30cccc;
+}
+
+#main_nav a {
+	color: #e0e0e0;
+}
+
+#main_nav li {
+	text-align: center;
+}
+
+#main_nav li:hover {
+	background-color: #105050;
+}
+
+#main_nav_wrapper.is-stuck #main_nav .active {
+	background-color: #209090;
+}
+
+/*  / main_nav */
 
 .callout {
 	padding-top: 0;
 	padding-bottom: 0;
+	background-color: #202020;
 }
 
 .section_header {
 	height: 60px;
-
 	border-bottom: 1px solid #ccc;
 }
 
@@ -28,12 +74,12 @@
 }
 
 .section_control:hover {
-	background-color: #e0e0e0;
+	background-color: #444;
 	cursor: pointer;
 }
 
-.section_control:active {
-	background-color: #ccc;
+.section_control:active, .section_control .on {
+	background-color: #666;
 }
 
 
@@ -55,8 +101,8 @@
 	color: #33e033;
 }
 
-#queue_control_play:active {
-	color: #11cc11;
+#queue_control_play:active, #queue_control_play.on {
+	color: #66cc66;
 }
 
 #queue_control_stop {
@@ -67,8 +113,8 @@
 	color: #e03333;
 }
 
-#queue_control_stop:active {
-	color: #cc1111;
+#queue_control_stop:active, #queue_control_stop.on {
+	color: #cc6666;
 }
 
 
@@ -76,8 +122,6 @@
 
 #queue_list {
 	list-style-type: none;
-	overflow-y: scroll;
-	max-height: 500px;
 }
 
 #queue_list li {
@@ -96,7 +140,7 @@
 	border-top: none;
 }
 
-#queue_list li.being_processed {
+.being_processed_item {
 	background-color: #e0e0e0;
 }
 
@@ -118,7 +162,7 @@
 	font-weight: bold;
 }
 
-#queue_list li .thumbnail {
+#queue_list li .thumbnail, .being_processed_item .thumbnail {
 	max-height: 120px;
 }
 
@@ -126,20 +170,16 @@
 	box-shadow: 0 0 0 1px rgba(10,10,10,.2);
 }
 
-.queue_item_title {
+.queue_item_title, .being_processed_item_title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; 
-}
-
-	
-.queue_item_title {
 	font-size: 110%;
 	font-weight: bold;
 	color: #666;
 }
 
-.queue_item_status {
+.queue_item_status, .being_processed_item_status {
 	text-align: center;
 }
 
@@ -153,17 +193,17 @@
 	color: #009000;
 }
 
-.queue_item_status small {
+.queue_item_status small, {
 	color: #999;
 	display: block;
 }
 
-.being_processed .queue_item_status small {
+.being_processed_item small {
 	color: #333;
 	display: block;
 }
 
-.being_processed .queue_item_status i {
+.being_processed_item i {
 	font-size: 40px;
 }
 
