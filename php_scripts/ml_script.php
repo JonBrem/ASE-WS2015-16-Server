@@ -3,7 +3,10 @@
 	$execPath = "/home/jon/.CLion12/system/cmake/generated/82e833ec/82e833ec/Debug/ASE-WS2015-16";
 
 	$folder = "/home/jon/Desktop/training_images";
+	$outputFolder = "/home/jon/Desktop/training_results";
 
+	$times = "$outputFolder/times.txt";
+	$fh = fopen($times, "a+");
 	$mserDeltas = array(45, 40, 30, 25);
 	$mserMinAreaFactors = array(0.00005, 0.00002, 0.000005);
 	$mserMaxAreaFactors = array(0.1, 0.05, 0.02);
@@ -25,10 +28,14 @@
 						$minConfidence1 = $minConfidences1[$indices[4]];
 						for($n = 0; $indices[5] < count($minConfidences2); $indices[5]++) {
 							$minConfidence2  = $minConfidences1[$indices[5]];
-							$jsonOutputPath = "/home/jon/Desktop/training_results/$indices[0]_$indices[1]_$indices[2]_$indices[3]_$indices[4]_$indices[5].json";
+							$jsonOutputPath = "$outputFolder/$indices[0]_$indices[1]_$indices[2]_$indices[3]_$indices[4]_$indices[5].json";
 							echo $jsonOutputPath . "<br>";
 							// echo "$execPath $folder $jsonOutputPath $mserDelta $mserMinAreaFactor $mserMaxAreaFactor $mserMaxVariation $minConfidence1 $minConfidence2";
+							$timeStart = microtime(true);
 							exec("$execPath $folder $jsonOutputPath $mserDelta $mserMinAreaFactor $mserMaxAreaFactor $mserMaxVariation $minConfidence1 $minConfidence2");
+							$timeEnd = microtime(true);
+							fwrite($fh, "$indices[0]_$indices[1]_$indices[2]_$indices[3]_$indices[4]_$indices[5]\t" . ($timeEnd - $timeStart) . "\n");
+							fflush($fh);
 						}
 						$indices[5] = 0;
 					}
@@ -40,3 +47,5 @@
 		}
 		$indices[1] = 0;
 	}
+
+	fclose($fh);
