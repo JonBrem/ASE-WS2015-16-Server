@@ -12,6 +12,7 @@
 
 				$conn = getDBConnection();
 				if(!$conn->connect_error) {
+					$this->checkQueueErrors($conn);
 					$this->checkCurrentTextRecognition($conn);
 					$this->checkQueue($conn);
 					$this->checkQueueDownloads($conn);
@@ -297,6 +298,30 @@
 
 		private function writeTime() {
 
+		}
+
+		private function checkQueueErrors($conn) {
+			$errors = $conn->query("SELECT * FROM queue WHERE status IN (\"" . STATUS_DOWNLOAD_ERROR . "\")");
+			if($errors->num_rows > 0) {
+				while($error = $errors->fetch_assoc()) {
+					$this->removeErroneousQueueItem($error["media_id"], $error["status"], $conn);
+				}
+			}
+		}
+
+		private function removeErroneousQueueItem($mediaId, $status, $conn) {
+			$conn->query("DELETE FROM queue WHERE media_id=$mediaId");
+			$conn->query("UPDATE media SET status=\"$status\" WHERE id=$mediaId");
+
+			// update queue item numbers!!
+			$queueItems = $conn->query("SELECT * FROM queue ORDER BY position ASC");
+			if($queueItems->num_rows > 0) {
+				$index = 1;
+				while($queueItem = $queueItems->fetch_assoc()) {
+					$conn->query("UPDATE queue SET position=$index WHERE id=$queueItem[id]");
+					$index++;
+				}
+			}
 		}
 		
 		/**

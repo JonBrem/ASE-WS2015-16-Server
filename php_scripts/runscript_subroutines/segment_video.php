@@ -8,6 +8,11 @@
 	$videoFilePath = $_GET['video_file_path'];
 	$segmentedVideoPath = $_GET['segmented_video_path'];
 
+	if(!file_exists($videoFilePath)) {
+		$conn->query("UPDATE queue SET status=\"" . STATUS_DOWNLOAD_ERROR . "\" WHERE id=$queueID");
+		exit("Datei wurde nicht gefunden.");
+	}
+
 	// first: delete all files in $segmentedVideoPath
 	$files = glob("$segmentedVideoPath/*"); // get all file names
 	foreach($files as $file){ // iterate files

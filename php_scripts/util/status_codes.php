@@ -49,3 +49,5 @@
 	// video is in the history
 	define("STATUS_HISTORY", "history"); // FOR "media" TABLE
 
+	// 
+	define("STATUS_DOWNLOAD_ERROR", "download_error"); // FOR "queue" TABLE
