@@ -5,7 +5,7 @@
 
 	$conn = getDBConnection();
 
-	$sqlResult = $conn->query("SELECT * FROM media WHERE status IN (\"" . STATUS_DOWNLOAD_ERROR . "\")");
+	$sqlResult = $conn->query("SELECT * FROM media WHERE status IN (" . ERRORS_SQL . ")");
 
 	if($sqlResult->num_rows > 0) {
 		$erroneousItems = array();

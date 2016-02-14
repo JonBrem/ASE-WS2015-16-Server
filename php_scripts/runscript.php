@@ -301,7 +301,7 @@
 		}
 
 		private function checkQueueErrors($conn) {
-			$errors = $conn->query("SELECT * FROM queue WHERE status IN (\"" . STATUS_DOWNLOAD_ERROR . "\")");
+			$errors = $conn->query("SELECT * FROM queue WHERE status IN (" . ERRORS_SQL . ")");
 			if($errors->num_rows > 0) {
 				while($error = $errors->fetch_assoc()) {
 					$this->removeErroneousQueueItem($error["media_id"], $error["status"], $conn);

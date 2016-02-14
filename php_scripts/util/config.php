@@ -31,10 +31,12 @@
 		$results = $conn->query("SELECT * FROM config WHERE name=\"$which\"");
 		if($results->num_rows > 0) {
 			$row = $results->fetch_assoc();
+			$conn->close();
 			return $row['value'];
+		} else {
+			$conn->close();
+			return null;
 		}
-
-		$conn->close();
 	}
 
 	function getMultiple($whichOnes) {

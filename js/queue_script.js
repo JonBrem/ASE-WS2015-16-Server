@@ -159,7 +159,7 @@ var Queue = (function() {
 		for(var j = 0; j < queueItemModels.length; j++) {
 			var remove = true;
 			for(var i = 0; i < e.length; i++) {
-				if(e[i].id == queueItemModels[j].getId()) {
+				if(e[i].id == queueItemModels[j].getId() && (e[i].status != "downloading" && e[i].status != "downloaded")) {
 					remove = false;
 				}
 			}

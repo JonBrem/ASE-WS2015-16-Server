@@ -49,5 +49,10 @@
 	// video is in the history
 	define("STATUS_HISTORY", "history"); // FOR "media" TABLE
 
-	// 
+	// video does no longer exist / some problem in download script.
 	define("STATUS_DOWNLOAD_ERROR", "download_error"); // FOR "queue" TABLE
+
+	// probably: FFmpeg // FFprobe binaries could not be found.
+	define("STATUS_SEGMENTING_ERROR", "segmenting_error"); // FOR "queue" TABLE
+
+	define("ERRORS_SQL", "\"" . STATUS_DOWNLOAD_ERROR . "\",\"" . STATUS_SEGMENTING_ERROR . "\"");
