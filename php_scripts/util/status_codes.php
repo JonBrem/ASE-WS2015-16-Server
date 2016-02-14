@@ -1,5 +1,15 @@
 <?php
 
+	/**
+	 * <small>The function does nothing, this is just for the documentation.</small>
+	 * The status codes define what happens and the order in which that happens.
+	 * The main table has some status codes (crawled, in_queue, history and various error codes)
+	 * and the queue table has many more status.
+	 * In both tables, the status describes what is currently happening to the media item.
+	 * Status codes in the queue table are used to communicate the items' status from within the subroutines.
+	 */
+	function status_codes() {}
+
 	// the item was crawled and will be added to the queue if there are fewer than 10 items in there.
 	define("STATUS_CRAWLED", "crawled"); // FOR "media" TABLE
 

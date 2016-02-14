@@ -2,7 +2,7 @@
 
 	/**
 	 * Helper method that can be included in any other files and returns
-	 * a database connection with pre-set parameters..
+	 * a database connection with pre-set parameters.
 	 * Don't forget to close the connection after using it!
 	 */
 	function getDBConnection($server = "localhost", $username = "root", 

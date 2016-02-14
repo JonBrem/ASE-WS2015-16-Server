@@ -7,6 +7,11 @@
 	define("CONFIG_FFPROBE_PATH", "ffprobe_path");
 	define("CONFIG_JAVA_EVAL_PATH", "java_eval_path");
 
+	/**
+	 * Update a row in the configuration table to the value.
+	 * @param $which one of the constants defined in the file (e.g. ffmpeg binaries path: ffmpeg_path)
+	 * @param $val the new value of this constant
+	 */ 
 	function set($which, $val) {
 		$conn = getDBConnection();
 
@@ -25,6 +30,11 @@
 		$conn->close();
 	}
 
+	/**
+	 * Retrieve the specified value from the configuration table.
+	 * @param $which one of the constants defined in the file (e.g. ffmpeg binaries path: ffmpeg_path)
+	 * @return null (if no value was found for that "$which") or the value.
+	 */
 	function get($which) {
 		$conn = getDBConnection();
 
@@ -39,6 +49,11 @@
 		}
 	}
 
+	/**
+	 * Retrieve the specified values from the configuration table.
+	 * @param $whichOnes array of some of the constants defined in the file (e.g. ffmpeg binaries path: ffmpeg_path)
+	 * @return array (may be empty) containing the names of $whichOnes as keys (if it found the corresponding value) and the corresponding values as values.
+	 */
 	function getMultiple($whichOnes) {
 		$sql = "SELECT * FROM config WHERE name IN (";
 		for($i = 0; $i < sizeof($whichOnes); $i++) {
