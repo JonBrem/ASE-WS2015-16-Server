@@ -35,12 +35,19 @@ body {
 	text-align: center;
 }
 
-#main_nav li:hover {
+#main_nav li:hover, #open_settings:hover {
 	background-color: #105050;
 }
 
 #main_nav_wrapper.is-stuck #main_nav .active {
 	background-color: #209090;
+}
+
+#open_settings {
+	font-size: 30px;
+	display: block;
+	cursor: pointer;
+	text-align: center;
 }
 
 /*  / main_nav */
@@ -239,4 +246,3 @@ body {
 	background-color: #00a054;
 	cursor: pointer;
 }
-

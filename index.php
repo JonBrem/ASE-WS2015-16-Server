@@ -25,13 +25,13 @@
 							<div class="small-12 large-3 columns" data-equalizer-watch>
 								<h2>TextFinder</h2>
 							</div>			
-							<ul class="horizontal menu expeditionpanded small-11 large-8 columns">
+							<ul class="horizontal menu expedition small-11 large-8 columns">
 								<li style="width: 33%"><a href="#processing_area">In Verarbeitung</a></li>
 								<li style="width: 33%"><a href="#queue_area">Queue</a></li>
 								<li style="width: 33%"><a href="#history_area">Fertig verarbeitete Videos</a></li>
 							</ul>
 							<div class="small-1 large-1 columns">
-							&nbsp; <!-- todo: settings -->
+								<i class="fi-widget" id="open_settings"></i>
 							</div>
 						</nav>
 					</div>
@@ -116,6 +116,7 @@
 	<!-- own scripts -->
 	<script type="text/javascript" src="js/queue_script.js"></script>
 	<script type="text/javascript" src="js/history_script.js"></script>
+	<script type="text/javascript" src="js/settings.js"></script>
 
 	<script>
 		$(document).foundation();
