@@ -31,15 +31,17 @@
 
 	// query using the media ID string, assign tags to the media items
 
-	$tags = $conn->query("SELECT * FROM tags WHERE media_id IN $mediaIDs;");
-	if($tags->num_rows > 0) {
-		while($row = $tags->fetch_assoc()) {
-			// append "object" to the tags array in the media item
-			$mediaItems[$row["media_id"]]["tags"][] = array(
-				"id" => $row["id"],
-				"content" => $row["content"],
-				"accepted" => $row["accepted"]
-			);	
+	if(sizeof($mediaItems) > 0) {
+		$tags = $conn->query("SELECT * FROM tags WHERE media_id IN $mediaIDs");
+		if($tags->num_rows > 0) {
+			while($row = $tags->fetch_assoc()) {
+				// append "object" to the tags array in the media item
+				$mediaItems[$row["media_id"]]["tags"][] = array(
+					"id" => $row["id"],
+					"content" => $row["content"],
+					"accepted" => $row["accepted"]
+				);	
+			}
 		}
 	}
 

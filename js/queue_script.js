@@ -106,11 +106,16 @@ var Queue = (function() {
 				itemBeingProcessed = 1;
 				showItemInProcess(e[i]);
 			}
+		}		
 
-		}
+		if(itemBeingProcessed == 0 && itemInProcess != undefined) showThatNoItemIsBeingProcessed();
 
 		for(var i = 0; i < e.length; i++) {
 			if(e[i].status != "downloaded" && e[i].status != "downloading" && e[i].status != "in_queue") {				
+				for(var j = 0; j < queueItemModels.length; j++) {
+					if(queueItemModels[j].getId() == e[i].id) queueItemModels[j].remove();
+				}
+
 				continue;
 			}
 
@@ -133,13 +138,12 @@ var Queue = (function() {
 			}
 		}
 
-		if(itemBeingProcessed == 0) {
-			showThatNoItemIsBeingProcessed();
-		}
 	},
 
 	showItemInProcess = function(item) {
-		if(itemInProcess == undefined) {
+		if(itemInProcess == undefined || itemInProcess.getId() != item.id) {
+			if (itemInProcess != undefined) itemInProcess.remove();
+
 			itemInProcess = BeingProcessedItemModel(item);
 			itemInProcessView = BeingProcessedItemView(itemInProcess.getViewModel());
 			itemInProcessView.create($("#being_processed_item_wrapper"));
@@ -150,23 +154,29 @@ var Queue = (function() {
 
 	showThatNoItemIsBeingProcessed = function() {
 		if(itemInProcess != undefined) {
-			itemInProcess.destroy();
+			itemInProcess.remove();
+			itemInProcess = undefined;
 		}
 		$("#being_processed_item_wrapper").html("Momentan wird kein Bild verarbeitet");
 	},
 
 	destroyItemsIfNecessary = function(e) {
+		var removedItemIndices = [];
 		for(var j = 0; j < queueItemModels.length; j++) {
 			var remove = true;
 			for(var i = 0; i < e.length; i++) {
-				if(e[i].id == queueItemModels[j].getId() && (e[i].status != "downloading" && e[i].status != "downloaded")) {
+				if(e[i].id == queueItemModels[j].getId()) {
 					remove = false;
 				}
 			}
 
 			if(remove) {
 				queueItemModels[j].remove();
+				removedItemIndices.push(j);
 			}
+		}
+		for(var i = removedItemIndices.length - 1; i >= 0; i--) {
+			queueItemModels.splice(removedItemIndices, 1); // -i: for every item, the n
 		}
 	},
 
@@ -266,7 +276,8 @@ var QueueItemModel = function(data) {
 	};
 
 	var remove = function() {
-		//
+		viewModel.destroy();
+		publ = undefined;
 	};
 
 	var getStatus = function() {
@@ -319,9 +330,16 @@ var ViewModel = function(modelData) {
 		}
 	};
 
+	var destroy = function() {
+		for(var i = 0; i < changeListeners.length; i++) {
+			changeListeners[i]({"what": "destroy"});
+		}		
+	};
+
 	publ.registerChangeListener = registerChangeListener;
 	publ.getData = getData;
 	publ.update = update;
+	publ.destroy = destroy;
 	return publ;
 };
 
@@ -372,6 +390,8 @@ var QueueItemView = function(viewModel) {
 					status: e.value
 				}}));
 			}
+		} else if (e.what == "destroy") {
+			destroy();
 		}
 	};
 
@@ -416,7 +436,8 @@ var BeingProcessedItemModel = function(data) {
 	};
 
 	var remove = function() {
-		//
+		viewModel.destroy();
+		publ = undefined;
 	};
 
 	viewModel.registerChangeListener(onViewModelChange);
@@ -462,6 +483,8 @@ var BeingProcessedItemView = function(viewModel) {
 			$statusEl.html(processStatusTemplate({item: {
 				status: e.value
 			}}));
+		} else if (e.what == "destroy") {
+			destroy();
 		}
 	};
 
