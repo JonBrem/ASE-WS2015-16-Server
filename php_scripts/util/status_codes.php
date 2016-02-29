@@ -43,12 +43,6 @@
 	// follows after STATUS_FINISHED_PROCESSING
 	define("STATUS_EVALUATING_WORDS", "evaluating_words"); // FOR "queue" TABLE
 
-
-	define("STATUS_FINISHED_EVALUATING_WORDS", "finished_evaluating_words"); // FOR "queue" TABLE
-
-
-	define("STATUS_LOOKING_FOR_TAGS", "looking_for_tags"); // FOR "queue" TABLE
-
 	// tags were found, item is ready for history
 	// follows after "STATUS_LOOKING_FOR_TAGS"
 	define("STATUS_READY_FOR_HISTORY", "ready_for_history"); // FOR "queue" TABLE
@@ -59,13 +53,19 @@
 	// video is in the history
 	define("STATUS_HISTORY", "history"); // FOR "media" TABLE
 
+
+// __ERROR CODES __
+
 	// video does no longer exist / some problem in download script.
 	define("STATUS_DOWNLOAD_ERROR", "download_error"); // FOR "queue" TABLE (BRIEFLY) AND "media" TABLE
 
 	// probably: FFmpeg // FFprobe binaries could not be found.
 	define("STATUS_SEGMENTING_ERROR", "segmenting_error"); // FOR "queue" TABLE (BRIEFLY) AND "media" TABLE
 
-	// probably: FFmpeg // FFprobe binaries could not be found.
+	// probably: exe could not be found / did not have the necessary permissions / did not find the training files
 	define("STATUS_PROCESSING_ERROR", "processing_error"); // FOR "queue" TABLE (BRIEFLY) AND "media" TABLE
 
-	define("ERRORS_SQL", "\"" . STATUS_DOWNLOAD_ERROR . "\",\"" . STATUS_SEGMENTING_ERROR . "\",\"" . STATUS_PROCESSING_ERROR . "\"");
+	// something wrong with the java tool!
+	define("STATUS_EVALUATING_ERROR", "evaluating_error"); // FOR "queue" TABLE (BRIEFLY) AND "media" TABLE
+
+	define("ERRORS_SQL", "\"" . STATUS_DOWNLOAD_ERROR . "\",\"" . STATUS_SEGMENTING_ERROR . "\",\"" . STATUS_PROCESSING_ERROR . "\",\"" . STATUS_EVALUATING_ERROR . "\"");

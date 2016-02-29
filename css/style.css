@@ -6,6 +6,16 @@ body {
 	background: #000;
 }
 
+/* fixes (and other styles) for reveal (broken in foundation 6.1.1 if used simultaneously with magellan o.O ) */
+.reveal, .reveal * {
+	z-index: 500 !important;
+	background-color: #333;
+}
+
+.reveal-overlay {
+	z-index: 300 !important;
+}
+
 .title_area {
 	background-color: #202020;
 	margin-bottom: 20px;
@@ -13,7 +23,7 @@ body {
 
 /* main_nav */
 #main_nav_wrapper {
-	z-index: 10;
+	z-index: 400;
 	background-color: #202020;
 	padding-top: 10px;
 	padding-bottom: 5px;
@@ -48,6 +58,15 @@ body {
 	display: block;
 	cursor: pointer;
 	text-align: center;
+}
+
+#settings_modal * {
+	color: #e0e0e0;
+}
+
+#settings_modal input {
+	background-color: #cccccc;
+	color: #303030;
 }
 
 /*  / main_nav */

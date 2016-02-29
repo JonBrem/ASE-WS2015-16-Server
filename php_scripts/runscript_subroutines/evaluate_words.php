@@ -3,22 +3,62 @@
 	require_once('../util/db_connection.php');
 	require_once('../util/status_codes.php');
 
-	$file = $_GET["json_file"];
+	$inputFile = $_GET["json_file"];
 	$mediaID = $_GET["media_id"];
-	$outputFilePath = $_GET["output_file"];
+	$outputFile = $_GET["output_file"];
 	$javaExec = $_GET["java_exec_path"];
-	$trainingFolder = $_GET["training_folder"];
+	$javaToolFolder = $_GET["java_tool_folder"];
 
-	$conn = getDBConnection();
-	$conn->query("UPDATE queue SET status=\"" . STATUS_EVALUATING_WORDS . "\" WHERE media_id=$mediaID");
-	$conn->close();
+	/**
+	 * Selects the most common/probable words from the recognized text and
+	 * proposes them as tags for the video file.
+	 * 
+	 * @param $javaExec path to the java executable
+	 * @param $inputFile path to the file that the c++ executable created
+	 * @param $outputFile path to the file that the java executable will create
+	 * @param $javaToolFolder path to the folder the java executable is in 
+	 * @param $mediaID the ID of the video item
+	 */
+	function evaluateWords($javaExec, $inputFile, $outputFile, $javaToolFolder, $mediaID) {
+		$conn = getDBConnection();
+		$conn->query("UPDATE queue SET status=\"" . STATUS_EVALUATING_WORDS . "\" WHERE media_id=$mediaID");
+		$conn->close();
 
-	$out;
-	$return_var;
-	exec("java -jar $javaExec $file $outputFilePath $trainingFolder 2>&1", $out, $return_var);
+		$out;
+		$return_var;
+		exec("java -jar $javaExec $javaToolFolder $inputFile $outputFile 2>&1", $out, $return_var);
+		// var_dump($out);
 
-	var_dump($out);
+		$conn = getDBConnection();
+		addTags($mediaID, $outputFile, $conn);
 
-	$conn = getDBConnection();
-	$conn->query("UPDATE queue SET status=\"" . STATUS_FINISHED_EVALUATING_WORDS . "\" WHERE media_id=$mediaID");
-	$conn->close();
+		if(file_exists($outputFile)) {
+			$conn->query("UPDATE queue SET status=\"" . STATUS_READY_FOR_HISTORY . "\" WHERE media_id=$mediaID");
+		} else {
+			$conn->query("UPDATE queue SET status=\"" . STATUS_EVALUATING_ERROR . "\" WHERE media_id=$mediaID");
+		}
+		$conn->close();
+	}
+
+	function addTags($mediaID, $tagsFile, $conn) {
+		$handle = fopen($tagsFile, "r");
+		$index = 0;
+		if ($handle) {
+		    while (($line = fgets($handle)) !== false) {
+		    	$parts = explode("\t", $line);
+		    	error_log($line);
+		    	error_log($parts[0]);
+		    	$tag = $parts[0];
+				$conn->query("INSERT INTO tags (media_id,content,accepted) VALUES ($mediaID,\"$tag\",0)");
+		    	$index++;
+		    	if($index > 4) break;
+		    }
+
+		    fclose($handle);
+		} else {
+		    // error opening the file.
+		} 
+	}
+
+
+	evaluateWords($javaExec, $inputFile, $outputFile, $javaToolFolder, $mediaID);

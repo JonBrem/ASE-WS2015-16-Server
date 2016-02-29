@@ -49,7 +49,6 @@
 			$this->checkIfSegmentingVideoFinished($conn);
 			$this->checkIfParsingFinished($conn);
 			$this->checkIfEvaluationFinished($conn);
-			$this->checkIfFindingTagsFinished($conn);
 
 			if(!$this->currentlyProcessingImage($conn)) {
 				$item = $this->getItemToProcess($conn);
@@ -72,14 +71,14 @@
 		}
 
 		/**
-		 * If the media item that is currently being processed is at the stage "finished_evaluating_words", @todo.
+		 * If the media item that is currently being processed is at the stage "ready_for_history", it will be removed from the queues
 		 * @param $conn active SQL connection
 		 */
 		private function checkIfEvaluationFinished($conn) {
-			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_FINISHED_EVALUATING_WORDS ."\"");
+			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_READY_FOR_HISTORY ."\"");
 			if($sqlResult->num_rows > 0) {
 				$row = $sqlResult->fetch_assoc();
-				// $this->findTags($conn);
+				$this->moveToHistory($row['media_id'], $conn);
 			}
 		}
 
@@ -96,18 +95,6 @@
 		}
 
 		/**
-		 * If the media item that is currently being processed is at the stage "ready_for_history", it will be moved to the history and removed from the queue.
-		 * @param $conn active SQL connection
-		 */
-		private function checkIfFindingTagsFinished($conn) {
-			$sqlResult = $conn->query("SELECT `queue`.`media_id` FROM queue WHERE `status`=\"". STATUS_READY_FOR_HISTORY ."\"");
-			if($sqlResult->num_rows > 0) {
-				$row = $sqlResult->fetch_assoc();
-				$this->moveToHistory($row['media_id'], $conn);
-			}
-		}
-
-		/**
 		 * Calls the evalute_words subroutine.
 		 * @param $mediaID: ID of the item that is currently being processed
 		 * @param $conn active SQL connection
@@ -115,9 +102,9 @@
 		private function evaluateRecongizedWords($mediaID, $conn) {
 			$evaluationScript = $this->getPhpScriptsPathOnServer() . "runscript_subroutines/evaluate_words.php";
 			$parseOutput = $this->getAbsolutePathOnServer() . "/../video_downloads/output_$mediaID.json";
-			$javaExec = $this->getAbsolutePathOnServer() . "/../java_tool/ASE-WS2016-16-WordValidator.jar";
-			$javaOutput = $this->getAbsolutePathOnServer() . "/../video_downloads/java_output_$mediaID.json";
-			$trainingFolder = $this->getAbsolutePathOnServer() . "/../java_tool/wiki_texts";
+			$javaExec = $this->getAbsolutePathOnServer() . "/../java_tool/ASE-WS2015-16-WordValidator.jar";
+			$javaOutput = $this->getAbsolutePathOnServer() . "/../video_downloads/java_output_$mediaID.txt";
+			$javaToolPath = $this->getAbsolutePathOnServer() . "/../java_tool";
 			curl_request_async(
 				$evaluationScript,
 				array(
@@ -125,7 +112,7 @@
 					"json_file" => $parseOutput,
 					"output_file" => $javaOutput,
 					"java_exec_path" => $javaExec,
-					"training_folder" => $trainingFolder
+					"java_tool_folder" => $javaToolPath
 					),
 				"GET"
 			);
@@ -153,31 +140,25 @@
 		}
 
 		/**
-		* @todo remove?
-		 * Calls the find_tags subroutine.
-		 * @param $mediaID: ID of the item that is currently being processed
-		 * @param $conn active SQL connection
-		 */
-		private function findTags($mediaID, $conn) {
-			$findTagsScript = $this->getPhpScriptsPathOnServer() . "runscript_subroutines/find_tags.php";
-			$fileName = $this->getAbsolutePathOnServer() . "/../video_downloads/java_output_$mediaID.json";
-
-			curl_request_async(
-				$findTagsScript, 
-				array(
-					"file_name" => $fileName,
-					"media_id" => $mediaID 
-					), 
-				"GET");
-
-		}
-
-
-		/**
 		 *  @todo
 		 */
 		private function moveToHistory($mediaID, $conn) {
-			// @todo
+			$conn->query("DELETE FROM queue WHERE media_id=$mediaID");
+			$conn->query("UPDATE media SET status=\"" . STATUS_HISTORY . "\" WHERE id=$mediaID");
+
+			$this->fixQueueItemPositions($conn);
+		}
+
+		private function fixQueueItemPositions($conn) {
+			// update queue item numbers!!
+			$queueItems = $conn->query("SELECT * FROM queue ORDER BY position ASC");
+			if($queueItems->num_rows > 0) {
+				$index = 1;
+				while($queueItem = $queueItems->fetch_assoc()) {
+					$conn->query("UPDATE queue SET position=$index WHERE id=$queueItem[id]");
+					$index++;
+				}
+			}
 		}
 
 		/**
@@ -186,7 +167,6 @@
 		private function currentlyProcessingImage($conn) {
 			$condition = " `queue`.`status`=\"" . STATUS_BEING_PROCESSED . "\" OR"
 						 . " `queue`.`status`=\"" . STATUS_FINISHED_PROCESSING . "\" OR"
-						 . " `queue`.`status`=\"" . STATUS_LOOKING_FOR_TAGS . "\" OR"
 						 . " `queue`.`status`=\"" . STATUS_SEGMENTING_VIDEO . "\" OR"
 						 . " `queue`.`status`=\"" . STATUS_FINISHED_SEGMENTING_VIDEO . "\"";
 
@@ -409,16 +389,7 @@
 		private function removeErroneousQueueItem($mediaId, $status, $conn) {
 			$conn->query("DELETE FROM queue WHERE media_id=$mediaId");
 			$conn->query("UPDATE media SET status=\"$status\" WHERE id=$mediaId");
-
-			// update queue item numbers!!
-			$queueItems = $conn->query("SELECT * FROM queue ORDER BY position ASC");
-			if($queueItems->num_rows > 0) {
-				$index = 1;
-				while($queueItem = $queueItems->fetch_assoc()) {
-					$conn->query("UPDATE queue SET position=$index WHERE id=$queueItem[id]");
-					$index++;
-				}
-			}
+			$this->fixQueueItemPositions($conn);
 		}
 		
 		/**

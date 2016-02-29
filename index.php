@@ -31,7 +31,11 @@
 								<li style="width: 33%"><a href="#history_area">Fertig verarbeitete Videos</a></li>
 							</ul>
 							<div class="small-1 large-1 columns">
-								<i class="fi-widget" id="open_settings"></i>
+								<a href="#main_nav_wrapper" class="fi-widget" id="open_settings" data-toggle="settings_modal"></a>
+								<div id="settings_modal" class="reveal" data-reveal data-animation-in="fade-in" style="width: 100%">
+							 		<h2>Einstellungen</h2>
+							 		<form><div id="settings_contents">&nbsp;</div></form>
+								</div>
 							</div>
 						</nav>
 					</div>
@@ -110,7 +114,7 @@
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/underscore.min.js"></script>
-	<script type="text/javascript" src="js/foundation.min.js"></script>
+	<script type="text/javascript" src="js/foundation.js"></script>
 	<script type="text/javascript" src="js/what-input.min.js"></script>
 
 	<!-- own scripts -->

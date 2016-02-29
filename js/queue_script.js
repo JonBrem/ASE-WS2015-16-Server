@@ -142,7 +142,10 @@ var Queue = (function() {
 
 	showItemInProcess = function(item) {
 		if(itemInProcess == undefined || itemInProcess.getId() != item.id) {
-			if (itemInProcess != undefined) itemInProcess.remove();
+			if (itemInProcess != undefined) {
+				$("#being_processed_item_wrapper").empty();
+				itemInProcess.remove();
+			}
 
 			itemInProcess = BeingProcessedItemModel(item);
 			itemInProcessView = BeingProcessedItemView(itemInProcess.getViewModel());
