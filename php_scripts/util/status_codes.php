@@ -14,7 +14,7 @@
 	define("STATUS_CRAWLED", "crawled"); // FOR "media" TABLE
 
 	// item is in queue, not being downloaded or anything.
-	define("STATUS_IN_QUEUE", "in_queue"); // FOR "media" TABLE
+	define("STATUS_IN_QUEUE", "in_queue"); // FOR "media" TABLE and queue table (before "downloading")
 
 // ______________
 // EVERYTHING UNTIL THE NEXT "Line" IS ONLY FOR THE "queue" TABLE!! THE ITME IN THE MEDIA TABLE MUST KEEP THE STATUS "in_queue" !!!

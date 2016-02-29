@@ -40,14 +40,19 @@
 		$conn->close();
 	}
 
+	/**
+	 * adds up to 5 tags from the newly created file to the video.
+	 * 
+	 * @param $mediaID the ID of the video item
+	 * @param tagsFile path to the file the java executable created
+	 * @param $conn open SQL conneciton
+	 */
 	function addTags($mediaID, $tagsFile, $conn) {
 		$handle = fopen($tagsFile, "r");
 		$index = 0;
 		if ($handle) {
 		    while (($line = fgets($handle)) !== false) {
 		    	$parts = explode("\t", $line);
-		    	error_log($line);
-		    	error_log($parts[0]);
 		    	$tag = $parts[0];
 				$conn->query("INSERT INTO tags (media_id,content,accepted) VALUES ($mediaID,\"$tag\",0)");
 		    	$index++;

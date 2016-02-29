@@ -3,7 +3,7 @@
 	require_once("../util/status_codes.php");
 
 	/**
- 	 * downlodas the file at the given url to the specified path.
+ 	 * downloads the file at the given url to the specified path.
  	 * 
 	 * @param $url File to download; needs 'rb' permission.
 	 * @param $path Where to download to; needs 'wb' permission.
@@ -44,9 +44,6 @@
 		$conn->close();
 
 	} catch (Exception $e) {
-		// @TODO write that in the Database!!! Throw the video out or something!!
-		error_log("Some exception occurred while downloading the video or updating the db after the download.");
-
 		$conn = getDBConnection();
 		$conn->query("UPDATE queue SET status=\"" . STATUS_DOWNLOAD_ERROR . "\" WHERE media_id=$_GET[item_id];");
 		$conn->close();

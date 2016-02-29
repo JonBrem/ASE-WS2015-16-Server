@@ -3,8 +3,6 @@
 	require_once('../util/status_codes.php');
 	require_once('../util/config.php');
 
-
-	// @todo: make SQL var that users can edit
 	$execPath = get("exe_path");
 
 	$folder = $_GET['segmented_video_path'];
@@ -12,28 +10,34 @@
 
 	$mediaID = $_GET['media_id'];
 
-	$conn = getDBConnection();
-	$conn->query("UPDATE queue SET status=\"" . STATUS_BEING_PROCESSED . "\" WHERE media_id=$mediaID");
-	error_log("Set status to being processed!");
+	/**
+	 * Calls the C++ executable that will create a file with all the text recognitions for the image files in the folder.
+	 * Takes a <em>long</em> time. Should definitely be called in the background.
+	 * 
+	 * @param $execPath path to the exe (file system, not server paths)
+	 * @param $folder path to the folder containing the images
+	 * @param $jsonOutputPath path for the output file
+	 * @param $mediaID id of the media item that is being processed
+	 */
+	function parseVideo($execPath, $folder, $jsonOutputPath, $mediaID) {
 
-	// both $vars just used for exec
-	$out;
-	$return_var;
+		$conn = getDBConnection();
+		$conn->query("UPDATE queue SET status=\"" . STATUS_BEING_PROCESSED . "\" WHERE media_id=$mediaID");
 
-	exec("$execPath $folder $jsonOutputPath 35 0.00005 0.05 1.5 0.85 0.85 2>&1", $out, $return_var);
-	error_log("Exe is finished!");
+		// both $vars just used for exec
+		$out;
+		$return_var;
 
-	// var_dump($out);
+		exec("$execPath $folder $jsonOutputPath 35 0.00005 0.05 1.5 0.85 0.85 2>&1", $out, $return_var);
+		// var_dump($out); // if this line is uncommented, somehow the next parts may not get executed. no real reason why they wouldn't be, but that's how it is.
 
-	if(file_exists($jsonOutputPath)) {	
-		error_log("Status should be set to finished_processing");
+		if(file_exists($jsonOutputPath)) {	
+			$conn->query("UPDATE queue SET status=\"" . STATUS_FINISHED_PROCESSING . "\" WHERE media_id=$mediaID");
+		} else {
+			$conn->query("UPDATE queue SET status=\"" . STATUS_PROCESSING_ERROR . "\" WHERE media_id=$mediaID");
+		}
 
-		$conn->query("UPDATE queue SET status=\"" . STATUS_FINISHED_PROCESSING . "\" WHERE media_id=$mediaID");
-	} else {
-		error_log("Status should be set to processing_error");
-		
-		$conn->query("UPDATE queue SET status=\"" . STATUS_PROCESSING_ERROR . "\" WHERE media_id=$mediaID");
+		$conn->close();
 	}
-	error_log("SQL should be changed!!");
 
-	$conn->close();
+	parseVideo($execPath, $folder, $jsonOutputPath, $mediaID);
