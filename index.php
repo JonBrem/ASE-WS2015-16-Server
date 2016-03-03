@@ -35,6 +35,10 @@
 								<div id="settings_modal" class="reveal" data-reveal data-animation-in="fade-in" style="width: 100%">
 							 		<h2>Einstellungen</h2>
 							 		<form><div id="settings_contents">&nbsp;</div></form>
+							 		<div>
+										<button type="button" class="success button" id="save_settings_button">Speichern</button>
+										<button type="button" class="secondary button" id="cancel_settings_button">Abbrechen</button>
+									</div>
 								</div>
 							</div>
 						</nav>

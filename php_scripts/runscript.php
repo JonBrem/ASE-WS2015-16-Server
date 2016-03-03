@@ -1,6 +1,7 @@
 <?php
 	/* this should be running continuously. */
 	require_once("util/db_connection.php");
+	require_once("util/config.php");
 	require_once("util/status_codes.php");
 
     /**
@@ -404,7 +405,14 @@
 
 	$mediaTextRecognitionLogic = new MediaTextRecognitionLogic();
 
-	$mediaTextRecognitionLogic->run();
+	// while(true) {
+		// if(get("queue_status") == "running") {
+			$mediaTextRecognitionLogic->run();
+			// sleep(2);
+		// } else {
+			// sleep(5);
+		// }
+	// }
 
   /**
    * Opens a URL-connection in the background (by immediately terminating the connection after it is established).

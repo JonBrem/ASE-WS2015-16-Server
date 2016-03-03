@@ -49,14 +49,11 @@
 	 */
 	function addTags($mediaID, $tagsFile, $conn) {
 		$handle = fopen($tagsFile, "r");
-		$index = 0;
 		if ($handle) {
 		    while (($line = fgets($handle)) !== false) {
-		    	$parts = explode("\t", $line);
-		    	$tag = $parts[0];
-				$conn->query("INSERT INTO tags (media_id,content,accepted) VALUES ($mediaID,\"$tag\",0)");
-		    	$index++;
-		    	if($index > 4) break;
+		    	// $parts = explode("\t", $line);
+		    	// $tag = $parts[0];
+				$conn->query("INSERT INTO tags (media_id,content,accepted) VALUES ($mediaID,\"$line\",0)");
 		    }
 
 		    fclose($handle);

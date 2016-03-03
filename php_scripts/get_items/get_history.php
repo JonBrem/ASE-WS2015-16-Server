@@ -17,7 +17,7 @@
 			$mediaIDs .= $row["id"] . ",";
 
 			$mediaItems[$row["id"]] = array(
-				"title" => $row["title"],
+				"title" => utf8_encode($row["title"]),
 				"url" => $row["url"],
 				"preview_image" => $row["preview_image"],
 				"tags" => array()
@@ -38,7 +38,7 @@
 				// append "object" to the tags array in the media item
 				$mediaItems[$row["media_id"]]["tags"][] = array(
 					"id" => $row["id"],
-					"content" => $row["content"],
+					"content" => utf8_encode($row["content"]),
 					"accepted" => $row["accepted"]
 				);	
 			}

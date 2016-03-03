@@ -4,9 +4,9 @@ var Settings = (function() {
 	$settingsModal = undefined,
 
 	explanations = {
-		"exe_path" : "Pfad zum Ausführbaren Programm, das die Texterkennung vornimmt",
+		"exe_path" : "Pfad zum ausführbaren Programm, das die Texterkennung vornimmt",
 		"ffmpeg_path" : "Pfad zu ffmpeg (kann leer gelassen werden, wenn der ffmpeg-Befehl auf der Kommandozeile funktioniert)",
-		"ffprobe_path" : "Pfad zu ffprobe (vermutlich ähnlich wie ffmpeg)"
+		"ffprobe_path" : "Pfad zu ffprobe (ähnlich wie ffmpeg)"
 	},
 
 	init = function() {
@@ -14,6 +14,10 @@ var Settings = (function() {
 		$settingsModal = $("#settings_modal");
 
 		$settingsModal.on("open.zf.reveal", updateSettings);
+		$("#save_settings_button").on("click", saveValues);
+		$("#cancel_settings_button").on("click", function(e) {
+			$("#settings_modal").foundation('close');
+		});
 	},
 
 	updateSettings = function() {
@@ -29,6 +33,24 @@ var Settings = (function() {
 		});
 	},
 
+	saveValues = function(e) {
+		var $inputs = $(".settings_input");
+		for(var i = 0; i < $inputs.length; i++) {
+			$.ajax({
+				url: 'php_scripts/set_config.php',
+				data: {
+					"which" : $inputs.eq(i).attr("data-key"),
+					"val" : $inputs.eq(i).val()
+				}
+			});
+		}
+
+		updateSettings();
+		alert("Gespeichert");
+
+		// $("#settings_modal").foundation('close');
+	},
+
 	buildStatusInputs = function(e) {
 		$settingsElement.empty();
 		for(var key in e) {
@@ -36,7 +58,7 @@ var Settings = (function() {
 			$settingsItemRow = $("<div class='row'>" +
 				"<div class='small-12 columns'>" + 
 					"<label>" + key + 
-						"<input type='text' value='" + e[key] + "'/>" + 
+						"<input class='settings_input' data-key='" + key + "' type='text' value='" + e[key] + "'/>" + 
 					"</label>" + 
 					((key in explanations)? ("<p class='help-text'>" + explanations[key] + "</p>") : "") +
 				"</div>" + 
