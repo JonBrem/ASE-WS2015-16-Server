@@ -82,6 +82,10 @@
 								<span class="section_control" style="float: right">
 									<i class="fi-info" id="queue_control_info"></i>
 								</span>
+								<span class="section_control" style="float: right; margin-right: 10px">
+									<a data-toggle="add_modal"><i class="fi-plus" id="queue_control_add"></i></a>
+									<?php include('php_views/add_modal.php'); ?>
+								</span>
 							</div>
 						</div> <!-- /.section_header -->
 
@@ -135,6 +139,7 @@
 	<script type="text/javascript" src="js/history/history_item_view.js"></script>
 
 	<script type="text/javascript" src="js/settings.js"></script>
+	<script type="text/javascript" src="js/add_video_to_queue.js"></script>
 
 	<script>
 		$(document).foundation();
