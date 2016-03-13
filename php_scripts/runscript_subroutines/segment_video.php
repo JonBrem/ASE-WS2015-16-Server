@@ -10,6 +10,8 @@
 	$segmentedVideoPath = $_GET['segmented_video_path'];
 
 	/**
+	 * !runscript subroutine!
+	 * <br>
 	 * Creates images from the frames of a video; one image is taken every .2 seconds.
 	 * @param $mediaID the video's ID
 	 * @param $queueID the ID of the item in the queue

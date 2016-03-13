@@ -11,6 +11,8 @@
 	$mediaID = $_GET['media_id'];
 
 	/**
+	 * !runscript subroutine!
+	 * <br>
 	 * Calls the C++ executable that will create a file with all the text recognitions for the image files in the folder.
 	 * Takes a <em>long</em> time. Should definitely be called in the background.
 	 * 
@@ -28,9 +30,16 @@
 		$out;
 		$return_var;
 
-		exec("$execPath $folder $jsonOutputPath 35 0.00005 0.05 1.5 0.85 0.85 2>&1", $out, $return_var);
-		// var_dump($out); // if this line is uncommented, somehow the next parts may not get executed. no real reason why they wouldn't be, but that's how it is.
+		$recognitionConfig = get("recognition_config");
 
+		if($recognitionConfig == null || $recognitionConfig == "quality") {
+			exec("$execPath $folder $jsonOutputPath 30 0.00005 0.02 2.0 0.9 0.85 2>&1", $out, $return_var);
+		} else {
+			exec("$execPath $folder $jsonOutputPath 45 0.00002 0.02 1.0 0.9 0.9 2>&1", $out, $return_var);			
+		}
+		
+		// var_dump($out); // if this line is uncommented, somehow the next parts may not get executed. no real reason why they wouldn't be, but that's how it is.
+		
 		if(file_exists($jsonOutputPath)) {	
 			$conn->query("UPDATE queue SET status=\"" . STATUS_FINISHED_PROCESSING . "\" WHERE media_id=$mediaID");
 		} else {

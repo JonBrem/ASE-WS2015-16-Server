@@ -9,7 +9,9 @@
 	$javaExec = $_GET["java_exec_path"];
 	$javaToolFolder = $_GET["java_tool_folder"];
 
-	/**
+	/**!
+	 * runscript subroutine!
+	 * <br>
 	 * Selects the most common/probable words from the recognized text and
 	 * proposes them as tags for the video file.
 	 * 

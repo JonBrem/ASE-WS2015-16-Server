@@ -19,6 +19,7 @@
 		 */
 		public function run() {
 			$lastRunTime = $this->readTime();
+
 			if($this->checkTimeDifference($lastRunTime)) {
 				$this->writeTime();
 
@@ -33,8 +34,9 @@
 				}
 
 				$conn->close();
+				return true;
 			} else { # not enough time has passed for this to run again.
-				// do nothing, let this end.
+				return false;
 			}
 		}
 
@@ -364,16 +366,6 @@
 
 		}
 
-
-		// @TODO
-		private function readTime() {
-			return 0;
-		}
-
-		private function writeTime() {
-
-		}
-
 		/**
 		 * checks if there are any items with errors (see status codes) in the queue; if so,
 		 * removes those items and updates the positions of the other ones.
@@ -398,21 +390,44 @@
 		 * Avoids having multiple run scripts be running at the same time.
 		 */
 		private function checkTimeDifference($lastRunTime) {
-			return true;
+			return microtime(true) >= $lastRunTime + 1.99;
+		}
+
+		private function readTime() {
+			$timeFilePath = $this->getTimeFilePath();
+			if(file_exists($timeFilePath)) {
+				return floatval(file_get_contents($this->getTimeFilePath()));
+			} else {
+				return 0;
+			}
+		}
+
+		private function writeTime() {
+			$fh = fopen($this->getTimeFilePath(), "w+");
+			fwrite($fh, microtime(true));
+			fflush($fh);
+			fclose($fh);
+		}
+
+		private function getTimeFilePath() {
+			return $this->getAbsolutePathOnServer() . "/../video_downloads/runscript_time.txt";
 		}
 
 	}
 
 	$mediaTextRecognitionLogic = new MediaTextRecognitionLogic();
 
-	// while(true) {
-		// if(get("queue_status") == "running") {
-			$mediaTextRecognitionLogic->run();
-			// sleep(2);
-		// } else {
-			// sleep(5);
-		// }
-	// }
+	while(true) {
+		if(get("queue_status") == "running") {
+			if($mediaTextRecognitionLogic->run()) {
+				sleep(2);
+			} else {
+				break;
+			}
+		} else {
+			sleep(5);
+		}
+	}
 
   /**
    * Opens a URL-connection in the background (by immediately terminating the connection after it is established).
