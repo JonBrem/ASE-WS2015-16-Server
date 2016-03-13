@@ -7,7 +7,7 @@
     /**
      * The central class in this application.
      * Periodically performs the main routine if runscript.php was once called.
-     * (@todo: calling it more often does not do any harm, further calls will be ignored.)
+     * calling it more often does not do any harm, further calls will be ignored.
      */
 	class MediaTextRecognitionLogic {
 
@@ -15,7 +15,7 @@
 		 * Performs the main routine of this application.
 		 * Controls the queue & what happens to the item that is being processed at the moment (If there is one).
 		 * Also checks if any errors occurred.
-		 * @todo <b>Caution!</b> May not be executed, depending on when the method was last called. 
+		 * <b>Caution!</b> May not be executed, depending on when the method was last called. 
 		 */
 		public function run() {
 			$lastRunTime = $this->readTime();
@@ -24,6 +24,11 @@
 				$this->writeTime();
 
 				$conn = getDBConnection();
+
+				if($this->wasProbablyInterrupted($lastRunTime)) {
+					$this->resetStatus($conn);
+				}
+
 				if(!$conn->connect_error) {
 					$this->checkQueueErrors($conn);
 					$this->checkCurrentTextRecognition($conn);
@@ -37,6 +42,32 @@
 				return true;
 			} else { # not enough time has passed for this to run again.
 				return false;
+			}
+		}
+
+		/**
+		 * If there was a severe interruption (e.g. the server was shut down), some items in the queue may have a faulty status
+		 * and be stuck in one of the "currently doing something"-status without anything actually being done.
+		 * If the script was last called more than an hour ago, this method assumes that was true and resets all these status.
+		 * 
+		 * 
+		 * @param $conn active SQL connection
+		 */
+		public function resetStatus($conn) {
+			$results = $conn->query('SELECT * FROM queue WHERE `status` IN ("' . STATUS_BEING_PROCESSED . '","' . STATUS_SEGMENTING_VIDEO . '","' . STATUS_EVALUATING_WORDS . '","' . STATUS_DOWNLOADING . '")');
+
+			if($results->num_rows > 0) {
+				while($result = $results->fetch_assoc() != null) {
+					$newStatus = null;
+					if ($result["status"] == STATUS_BEING_PROCESSED) $newStatus = STATUS_FINISHED_SEGMENTING_VIDEO;
+					else if ($result["status"] == STATUS_SEGMENTING_VIDEO) $newStatus = STATUS_DOWNLOADED;
+					else if ($result["status"] == STATUS_EVALUATING_WORDS) $newStatus = STATUS_FINISHED_PROCESSING;
+					else if ($result["status"] == STATUS_DOWNLOADING) $newStatus = STATUS_IN_QUEUE;
+
+					if($newStatus != null) {
+						$conn->query("UPDATE queue SET `status`=\"$newStatus\" WHERE `id`=" . $result["id"]);
+					}
+				}
 			}
 		}
 
@@ -143,7 +174,7 @@
 		}
 
 		/**
-		 *  @todo
+		 *  
 		 */
 		private function moveToHistory($mediaID, $conn) {
 			$conn->query("DELETE FROM queue WHERE media_id=$mediaID");
@@ -208,7 +239,7 @@
 			
 			$videosFolder = $this->getAbsolutePathOnServer() . "/../video_downloads";
 
-			$videoFilePath = "$videosFolder/$item[media_id].mp4"; // @todo this should probably be stored in sql & loaded from there
+			$videoFilePath = "$videosFolder/$item[media_id].mp4"; 
 			$segmentedVideoPath = "$videosFolder/video_segments";
 
 			curl_request_async(
@@ -250,7 +281,6 @@
 				while($row = $sqlResult->fetch_assoc()) {
 					if($conn->query("UPDATE queue SET `status`=\"". STATUS_DOWNLOADING ."\" WHERE `media_id` = $row[media_id]")) {
 
-						// @todo update path!!!
 						$this->downloadInBackground($row["media_id"], $row["video_url"], $this->getAbsolutePathOnServer() . "/../video_downloads/$row[media_id].mp4");
 					}
 				}
@@ -297,7 +327,7 @@
 				$row = $result->fetch_assoc();
 				return $row["COUNT(*)"];
 			} else {
-				return 0; // @TODO: maybe throw error?
+				return 0;
 			}
 		}
 
@@ -393,6 +423,15 @@
 			return microtime(true) >= $lastRunTime + 1.99;
 		}
 
+		/**
+		 * Checks if so much time has passed that there likely was an interruption & the processes should be restarted.
+		 * Time is currently set to 1 hour because otherwise, we might have 2 c++ reognition proesses running.
+		 * @return true if one hour has passed sine the last run time.
+		 */
+		private function wasProbablyInterrupted($lastRunTime) {
+			return microtime(true) >= $lastRunTime + 3600;
+		}
+
 		private function readTime() {
 			$timeFilePath = $this->getTimeFilePath();
 			if(file_exists($timeFilePath)) {
@@ -416,6 +455,10 @@
 	}
 
 	$mediaTextRecognitionLogic = new MediaTextRecognitionLogic();
+
+	if(isset($_GET) && array_key_exists("reset_status", $_GET)) {
+		$mediaTextRecognitionLogic->resetStatus(getDBConnection());
+	}
 
 	while(true) {
 		if(get("queue_status") == "running") {
