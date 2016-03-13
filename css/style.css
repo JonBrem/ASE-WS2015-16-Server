@@ -167,7 +167,12 @@ body {
 }
 
 .being_processed_item {
-	background-color: #e0e0e0;
+	padding-top: 10px;
+	background-color: #303030;
+}
+
+.being_processed_item *:not(a) {
+	color: #999;
 }
 
 #queue_list li:last-child {
@@ -188,7 +193,7 @@ body {
 	font-weight: bold;
 }
 
-#queue_list li .thumbnail, .being_processed_item .thumbnail {
+#queue_list li .thumbnail, .being_processed_item .thumbnail, .history_list_item .thumbnail {
 	max-height: 120px;
 }
 
@@ -240,10 +245,29 @@ body {
 	list-style-type: none;
 }
 
+#history_list li {
+    border-top: 1px dashed #ccc;
+    border-bottom: 1px dashed #ccc;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#history_list li:first-child {
+	border-top: none;
+}
+
+#history_list li:last-child {
+	border-bottom: none;
+}
+
 .history_item_tags .label {
 	display: inline-block;
 	padding: 8px;
 	border-radius: 4px;
+	margin-top: 4px;
+	margin-right: 4px;
 }
 
 .history_item_tags .label.secondary:hover {

@@ -6,7 +6,8 @@ var Settings = (function() {
 	explanations = {
 		"exe_path" : "Pfad zum ausführbaren Programm, das die Texterkennung vornimmt",
 		"ffmpeg_path" : "Pfad zu ffmpeg (kann leer gelassen werden, wenn der ffmpeg-Befehl auf der Kommandozeile funktioniert)",
-		"ffprobe_path" : "Pfad zu ffprobe (ähnlich wie ffmpeg)"
+		"ffprobe_path" : "Pfad zu ffprobe (ähnlich wie ffmpeg)",
+		"recognition_config" : "'quality' oder 'speed' sind zulässige Werte"
 	},
 
 	init = function() {

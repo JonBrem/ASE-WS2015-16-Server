@@ -122,8 +122,18 @@
 	<script type="text/javascript" src="js/what-input.min.js"></script>
 
 	<!-- own scripts -->
-	<script type="text/javascript" src="js/queue_script.js"></script>
-	<script type="text/javascript" src="js/history_script.js"></script>
+	<script type="text/javascript" src="js/basic_view_model.js"></script>
+
+	<script type="text/javascript" src="js/queue/queue_item_model.js"></script>
+	<script type="text/javascript" src="js/queue/queue_item_view.js"></script>
+	<script type="text/javascript" src="js/queue/being_processed_item_model.js"></script>
+	<script type="text/javascript" src="js/queue/being_processed_item_view.js"></script>
+	<script type="text/javascript" src="js/queue/queue_script.js"></script>
+
+	<script type="text/javascript" src="js/history/history_script.js"></script>
+	<script type="text/javascript" src="js/history/history_item_model.js"></script>
+	<script type="text/javascript" src="js/history/history_item_view.js"></script>
+
 	<script type="text/javascript" src="js/settings.js"></script>
 
 	<script>

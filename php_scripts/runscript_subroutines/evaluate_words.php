@@ -53,8 +53,8 @@
 		$handle = fopen($tagsFile, "r");
 		if ($handle) {
 		    while (($line = fgets($handle)) !== false) {
-		    	// $parts = explode("\t", $line);
-		    	// $tag = $parts[0];
+		    	$line = utf8_encode($line);
+		    	
 				$conn->query("INSERT INTO tags (media_id,content,accepted) VALUES ($mediaID,\"$line\",0)");
 		    }
 

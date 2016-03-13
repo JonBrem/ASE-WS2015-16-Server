@@ -4,7 +4,7 @@
 
 	$conn = getDBConnection();
 
-	$sqlResult = $conn->query("SELECT * FROM media WHERE status=\"" . STATUS_HISTORY . "\"");
+	$sqlResult = $conn->query("SELECT * FROM media WHERE status=\"" . STATUS_HISTORY . "\" ORDER BY id DESC");
 
 	// build media ID string for later, set up media items array
 	// array indizes = media id (so we don't have so many loops later :) )
@@ -17,9 +17,10 @@
 			$mediaIDs .= $row["id"] . ",";
 
 			$mediaItems[$row["id"]] = array(
+				"id" => $row["id"],
 				"title" => utf8_encode($row["title"]),
 				"url" => $row["url"],
-				"preview_image" => $row["preview_image"],
+				"preview_img" => $row["preview_image"],
 				"tags" => array()
 			);		
 		}
@@ -47,5 +48,11 @@
 
 	$conn->close();
 
-	echo json_encode($mediaItems);
+	$arrayToPrint = array();
+
+	foreach($mediaItems as $key => $item) {
+		$arrayToPrint[] = $item;
+	}
+
+	echo json_encode($arrayToPrint);
 ?>

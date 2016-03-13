@@ -6,6 +6,7 @@
 	define("CONFIG_FFMPEG_PATH", "ffmpeg_path");
 	define("CONFIG_FFPROBE_PATH", "ffprobe_path");
 	define("CONFIG_JAVA_EVAL_PATH", "java_eval_path");
+	define("CONFIG_RECOGNITION_SETTING", "recognition_config");
 
 	/**
 	 * Update a row in the configuration table to the value.
@@ -18,6 +19,13 @@
 		if($which == CONFIG_QUEUE_STATUS) {
 			if($val == "running" || $val == "stop") { // other values are not permitted
 				$conn->query("UPDATE config SET value=\"$val\" WHERE name=\"" . CONFIG_QUEUE_STATUS . "\"");
+			} else {
+				$conn->close();
+				return -1; 
+			}
+		} else if ($which == CONFIG_RECOGNITION_SETTING) {
+			if($val == "quality" || $val == "speed") { // other values are not permitted
+				$conn->query("UPDATE config SET value=\"$val\" WHERE name=\"" . CONFIG_RECOGNITION_SETTING . "\"");
 			} else {
 				$conn->close();
 				return -1; 
