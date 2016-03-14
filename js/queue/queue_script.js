@@ -39,9 +39,6 @@ var Queue = (function() {
 					color: "#333333"
 				}, 2000);
 		}, 4000);
-
-		$("#queue_control_play").on("click", function(e) {onQueueControlClick(true);});
-		$("#queue_control_stop").on("click", function(e) {onQueueControlClick(false);});
 	},
 
 	updateQueue = function() {
@@ -51,32 +48,6 @@ var Queue = (function() {
 			success: onQueueDownload,
 			error: onQueueDownloadError
 		});
-
-		getQueueRunningStatus();
-	},
-
-	getQueueRunningStatus = function() {
-		$.ajax({
-			url: 'php_scripts/get_config.php',
-			dataType: "json",
-			data: {
-				"which" : "queue_status"
-			},
-			success: function(e) {
-				updateQueueStatusDisplay(e);
-			},
-			error:function(e) {}
-		});
-	},
-
-	updateQueueStatusDisplay = function(e) {
-		if(e["queue_status"] == "running") {
-			$("#queue_control_play").addClass('on');
-			$("#queue_control_stop").removeClass('on');
-		} else {
-			$("#queue_control_play").removeClass('on');
-			$("#queue_control_stop").addClass('on');
-		}
 	},
 
 	onQueueDownload = function(e) {
@@ -182,19 +153,6 @@ var Queue = (function() {
 		for(var i = removedItemIndices.length - 1; i >= 0; i--) {
 			queueItemModels.splice(removedItemIndices, 1);
 		}
-	},
-
-	onQueueControlClick = function(on) {
-		$.ajax({
-			url: 'php_scripts/set_config.php',
-			dataType: 'json',
-			data: {
-				"which" : "queue_status",
-				"val" : (on? "running" : "stop")
-			},
-			success: function(e) {getQueueRunningStatus();},
-			error: function(e) {getQueueRunningStatus();}
-		});
 	},
 
 	onQueueDownloadError = function(e) {

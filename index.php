@@ -23,21 +23,9 @@
 				<nav data-sticky-container>
 					<div class="sticky" id="main_nav_wrapper" data-sticky data-margin-top="0" style="width:100%;">
 						<nav id="main_nav">
-							<div class="small-12 large-3 columns" data-equalizer-watch>
+							<div class="small-11 large-3 columns" data-equalizer-watch>
 								<h2>Texterkennungstool</h2>
 							</div>			
-
-							<div class="small-1 large-1 columns">
-								<a href="#main_nav_wrapper" class="fi-widget" id="open_settings" data-toggle="settings_modal"></a>
-								<div id="settings_modal" class="reveal" data-reveal data-animation-in="fade-in" style="width: 100%">
-							 		<h2>Einstellungen</h2>
-							 		<form><div id="settings_contents">&nbsp;</div></form>
-							 		<div>
-										<button type="button" class="success button" id="save_settings_button">Speichern</button>
-										<button type="button" class="secondary button" id="cancel_settings_button">Abbrechen</button>
-									</div>
-								</div>
-							</div>
 						</nav>
 					</div>
 				</nav>
@@ -46,6 +34,17 @@
 
 		<div class="row">
 			<div class="small-12 columns">
+
+				<div class="stop_play_controls">
+					<span style="font-size: 12pt; color: #777">Status des Tools:</span> 
+					<span class="stop_play_control">
+						<i class="fi-play has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Warteschlange abarbeiten, Skripte ausführen" id="control_play"></i>
+					</span>
+					<span class="stop_play_control">
+						<i class="fi-stop has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Nichts mehr tun (wird erst nach Fertigstellung der aktuellen Schritte aktiv)" id="control_stop"></i>
+					</span>
+				</div>
+
 				<ul class="accordion sections" data-accordion data-multi-expand="true" data-allow-all-closed="true">
 					<li class="accordion-item" data-accordion-item>
 						<a href="#" class="accordion-title">Fehlerhafte Einträge</a>
@@ -61,7 +60,7 @@
 						</div>
 					</li>
 
-					<li class="accordion-item" data-accordion-item>
+					<li class="accordion-item is-active" data-accordion-item>
 						<a href="#" class="accordion-title">In Verarbeitung</a>
 						<div class="accordion-content processing_area" id="processing_area" data-tab-content>
 							<div class="row">
@@ -77,7 +76,7 @@
 					</li>
 
 
-					<li class="accordion-item" data-accordion-item>
+					<li class="accordion-item is-active" data-accordion-item>
 						<a href="#" class="accordion-title">Warteschlange</a>					
 						<div class="accordion-content queue_area" id="queue_area" data-tab-content>
 							<div class="row">
@@ -85,16 +84,7 @@
 									<div class="row section_header">
 										<div class="small-12 columns section_controls">
 											<span class="section_control">
-												<i class="fi-play" id="queue_control_play"></i>
-											</span>
-											<span class="section_control">
-												<i class="fi-stop" id="queue_control_stop"></i>
-											</span>
-											<span class="section_control" style="float: right">
-												<i class="fi-info" id="queue_control_info"></i>
-											</span>
-											<span class="section_control" style="float: right; margin-right: 10px">
-												<a data-toggle="add_modal"><i class="fi-plus" id="queue_control_add"></i></a>
+												<a data-toggle="add_modal" id="add_to_queue_toggle_modal_button">Video zur Warteschlange hinzufügen</a>
 												<?php include('php_views/add_modal.php'); ?>
 											</span>
 										</div>
@@ -109,7 +99,7 @@
 						</div> <!-- /.queue_area -->
 					</li>
 
-					<li>
+					<li class="accordion-item" data-accordion-item>
 						<a href="#" class="accordion-title">Fertig</a>					
 						<div class="history_area accordion-content" id="history_area" data-tab-content>
 							<div class="row">
@@ -120,6 +110,16 @@
 										</ul>
 									</div>
 								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="accordion-item" data-accordion-item id="settings_accordion_item">
+						<a href="#" class="accordion-title">Einstellungen</a>		
+						<div class="settings_area accordion-content" id="settings_area" data-tab-content>
+					 		<form><div id="settings_contents">&nbsp;</div></form>
+					 		<div>
+								<button type="button" class="success button" id="save_settings_button">Speichern</button>
 							</div>
 						</div>
 					</li>
@@ -154,6 +154,7 @@
 	<script type="text/javascript" src="js/settings.js"></script>
 	<script type="text/javascript" src="js/add_video_to_queue.js"></script>
 	<script type="text/javascript" src="js/edit_video.js"></script>
+	<script type="text/javascript" src="js/play_pause_controls.js"></script>
 
 	<script>
 		$(document).foundation();

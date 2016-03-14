@@ -6,7 +6,10 @@ var HistoryItemView = function(viewModel) {
 
 	var $item;
 
-	var $tagsWrapper;
+	var $tagsWrapper,
+		$imgEl,
+		$titleEl,
+		$urlEl;
 
 	var viewModelData = viewModel.getData();
 
@@ -22,6 +25,10 @@ var HistoryItemView = function(viewModel) {
     	}}));
 
     	$tagsWrapper = $item.find('.history_item_tags');
+        $imgEl = $item.find('.thumbnail');
+        $titleEl = $item.find('.history_item_title');
+        $urlEl = $item.find('.history_item_url a');
+
     	updateTags();
 
     	$item.find('.history_item_delete').on('click', function(e) {
@@ -78,7 +85,14 @@ var HistoryItemView = function(viewModel) {
 	var onViewModelChange = function(e) {
 		if(e.what == "tags") {
 			updateTags();
-		} else if(e.what == "destroy") {
+		} else if(e.what == "preview_img") {
+            $imgEl.attr("src", (e.value != null && e.value.length > 0)? e.value : "no_image_available.png");
+        } else if(e.what == "title") {
+            $titleEl.text((e.value != null && e.value.length > 0)? e.value : "kein Titel angegeben");
+        } else if(e.what == "url") {            
+            $urlEl.attr("href", (e.value != null && e.value.length > 0)? e.value : "#");
+            $urlEl.text((e.value != null && e.value.length > 0)? "Zur Mediathek" : "kein Link angegeben");
+        } else if(e.what == "destroy") {
 			destroy();
 		}
 	};

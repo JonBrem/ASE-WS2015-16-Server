@@ -6,8 +6,12 @@ var QueueItemView = function(viewModel) {
 
 	var $item;
 
-	var $numberEl;
-	var $statusEl;
+	var $numberEl,
+	    $statusEl,
+        $imgEl,
+        $titleEl,
+        $urlEl;
+
 
 	var viewModelData = viewModel.getData();
 
@@ -25,6 +29,9 @@ var QueueItemView = function(viewModel) {
 
     	$numberEl = $item.find('.queue_item_number');
     	$statusEl = $item.find('.queue_item_progress');
+        $imgEl = $item.find('.thumbnail');
+        $titleEl = $item.find('.queue_item_title');
+        $urlEl = $item.find('.queue_item_url a');
 
     	$statusEl.html(statusTemplate({item: {
     		status: viewModelData.status
@@ -37,12 +44,13 @@ var QueueItemView = function(viewModel) {
     			$.ajax({
     				url: 'php_scripts/api/delete_video.php',
     				type: 'GET',
+                    dataType: 'application/json',
     				data: {
     					'id_type' : 'db_id',
     					'id_value' : viewModelData.id
     				},
     				success: function(e) {
-    					if(e.status != "ok") {
+    					if(e.status && e.status != "ok") {
     						alert(e.message);
     					}
     					Queue.updateQueue();
@@ -61,14 +69,19 @@ var QueueItemView = function(viewModel) {
 
 
 	var onViewModelChange = function(e) {
-		if(e.what == "number" || e.what == "status") { // nothing else can really change...
-			if(e.what == "number") {
-				$numberEl.html(e.value);
-			} else { // status
-				$statusEl.html(statusTemplate({item: {
-					status: e.value
-				}}));
-			}
+		if(e.what == "number") {
+			$numberEl.html(e.value);
+		} else if(e.what == "status") {
+			$statusEl.html(statusTemplate({item: {
+				status: e.value
+			}}));
+        } else if(e.what == "preview_img") {
+            $imgEl.attr("src", (e.value != null && e.value.length > 0)? e.value : "no_image_available.png");
+        } else if(e.what == "title") {
+            $titleEl.text((e.value != null && e.value.length > 0)? e.value : "kein Titel angegeben");
+        } else if(e.what == "url") {            
+            $urlEl.attr("href", (e.value != null && e.value.length > 0)? e.value : "#");
+            $urlEl.text((e.value != null && e.value.length > 0)? "Zur Mediathek" : "kein Link angegeben");
 		} else if (e.what == "destroy") {
 			destroy();
 		}

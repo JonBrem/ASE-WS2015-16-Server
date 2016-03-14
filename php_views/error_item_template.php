@@ -18,9 +18,9 @@
 		<!--__ -->
 		</div>
 		<div class="small-2 large-2 columns error_item_options">
-			<button type="button" class="button error_item_edit"><i class="fi-pencil"></i></button>
-			<button type="button" class="warning button error_item_retry"><i class="fi-loop"></i></button>
-			<button type="button" class="alert button error_item_delete"><i class="fi-x"></i></button>
+			<button type="button" class="button error_item_edit has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Videodaten bearbeiten"><i class="fi-pencil"></i></button>
+			<button type="button" class="warning button error_item_retry has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Video wieder zur Warteschlange hinzufügen"><i class="fi-loop"></i></button>
+			<button type="button" class="alert button error_item_delete has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Video löschen"><i class="fi-x"></i></button>
 		</div>
 	</li>
 </script>

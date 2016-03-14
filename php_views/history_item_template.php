@@ -20,7 +20,7 @@
 		</div>
 
 		<div class="small-1 large-1 columns history_item_cancel">
-			<button type="button" class="alert button history_item_delete"><i class="fi-x"></i></button>
+			<button type="button" class="alert button history_item_delete has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Video löschen"><i class="fi-x"></i></button>
 		</div>
 
 	</li>

@@ -5,7 +5,10 @@ var ErrorItemView = function(viewModel) {
 	var publ = {};
 
 	var $item;
-	var $statusEl;
+	var $statusEl,
+        $imgEl,
+        $titleEl,
+        $urlEl;
 
 	var viewModelData = viewModel.getData();
 
@@ -21,6 +24,9 @@ var ErrorItemView = function(viewModel) {
     	}}));
 
     	$statusEl = $item.find(".error_item_status");
+        $imgEl = $item.find('.thumbnail');
+        $titleEl = $item.find('.error_item_title');
+        $urlEl = $item.find('.error_item_url a');
 
     	$statusEl.html(errorStatusTemplate({item: {
     		status: viewModelData.status
@@ -69,11 +75,18 @@ var ErrorItemView = function(viewModel) {
 
 
 	var onViewModelChange = function(e) {
-		if(e.what == "status") { // nothing else can really change...
+		if(e.what == "status") {
 			$statusEl.html(errorStatusTemplate({item: {
 				status: e.value
 			}}));
-		} else if (e.what == "destroy") {
+		} else if(e.what == "preview_img") {
+            $imgEl.attr("src", (e.value != null && e.value.length > 0)? e.value : "no_image_available.png");
+        } else if(e.what == "title") {
+            $titleEl.text((e.value != null && e.value.length > 0)? e.value : "kein Titel angegeben");
+        } else if(e.what == "url") {            
+            $urlEl.attr("href", (e.value != null && e.value.length > 0)? e.value : "#");
+            $urlEl.text((e.value != null && e.value.length > 0)? "Zur Mediathek" : "kein Link angegeben");
+        } else if (e.what == "destroy") {
 			destroy();
 		}
 	};

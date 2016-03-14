@@ -60,11 +60,11 @@ body {
 	text-align: center;
 }
 
-.reveal * {
+.reveal *, .settings_area * {
 	color: #e0e0e0;
 }
 
-.reveal input {
+.reveal input, .settings_area input {
 	background-color: #cccccc;
 	color: #303030;
 }
@@ -114,32 +114,44 @@ body {
 	padding-top: 5px;
 }
 
-.section_controls {
+.stop_play_controls {
 	font-size: 40px;
 	height: 100%;
 }
 
-.section_control {
+.stop_play_controls {
+	margin-bottom: 20px;
+}
+
+.section_control, .stop_play_control {
 	height: 100%;
 	display: inline-block;
 
-	border-left: 1px solid #ccc;
-	border-right: 1px solid #ccc;
+	border: 1px solid #666;
+	border-radius: 2px;
 }
 
-.section_control:hover {
+.section_control:hover, .stop_play_control:hover {
 	background-color: #444;
 	cursor: pointer;
 }
 
-.section_control:active, .section_control .on {
+.section_control:active, .section_control .on, .stop_play_control:active, .stop_play_control .on {
 	background-color: #666;
 }
 
+.stop_play_control .on {
+	box-shadow: inset 2px 2px 3px #101010;
+}
 
-/* queue_control colors */
+#add_to_queue_toggle_modal_button {
+	padding: 10px;
+	color: #33aa33;
+}
 
-.section_control i {
+/* control colors */
+
+.section_control i, .stop_play_control i {
 	height: 100%;
 	width: 100%;
 	display: inline-block;
@@ -147,27 +159,27 @@ body {
 	padding-right: 15px;
 }
 
-#queue_control_play, #queue_control_add {
+#control_play, #queue_control_add {
 	color: #66ff66;
 }
 
-#queue_control_play:hover, #queue_control_add:hover {
+#control_play:hover, #queue_control_add:hover {
 	color: #33e033;
 }
 
-#queue_control_play:active, #queue_control_play.on, #queue_control_add:active {
+#control_play:active, #control_play.on, #queue_control_add:active {
 	color: #66cc66;
 }
 
-#queue_control_stop {
+#control_stop {
 	color: #ff6666;
 }
 
-#queue_control_stop:hover {
+#control_stop:hover {
 	color: #e03333;
 }
 
-#queue_control_stop:active, #queue_control_stop.on {
+#control_stop:active, #queue_control_stop.on {
 	color: #cc6666;
 }
 

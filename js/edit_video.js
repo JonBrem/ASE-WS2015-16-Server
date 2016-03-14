@@ -8,7 +8,7 @@ var EditVideoHelper = (function() {
 		$editVideoModal = $("#edit_modal");
 
 		$("#save_edit_video_button").on("click", updateVideo);
-		$("#cancel_save_video_button").on("click", function(e) {
+		$("#cancel_edit_video_button").on("click", function(e) {
 			$("#edit_modal").foundation('close');
 		});
 	},

@@ -1,7 +1,10 @@
 var Settings = (function() {
 	var that = {},
 	$settingsElement = undefined,
-	$settingsModal = undefined,
+	$accordionElement = undefined,
+
+	waitingForServerResponses = undefined,
+	receivedServerResponses = undefined,
 
 	explanations = {
 		"exe_path" : "Pfad zum ausführbaren Programm, das die Texterkennung vornimmt",
@@ -12,13 +15,16 @@ var Settings = (function() {
 
 	init = function() {
 		$settingsElement = $("#settings_contents");
-		$settingsModal = $("#settings_modal");
+		$accordionElement = $(".accordion");
 
-		$settingsModal.on("open.zf.reveal", updateSettings);
-		$("#save_settings_button").on("click", saveValues);
-		$("#cancel_settings_button").on("click", function(e) {
-			$("#settings_modal").foundation('close');
+		$accordionElement.on("down.zf.accordion", function(e) {
+			setTimeout(function() {
+				if($("#settings_accordion_item").hasClass('is-active')) {
+					updateSettings();
+				}
+			}, 300);
 		});
+		$("#save_settings_button").on("click", saveValues);
 	},
 
 	updateSettings = function() {
@@ -36,20 +42,31 @@ var Settings = (function() {
 
 	saveValues = function(e) {
 		var $inputs = $(".settings_input");
+		receivedServerResponses = 0;
+		waitingForServerResponses = $inputs.length;
+
 		for(var i = 0; i < $inputs.length; i++) {
 			$.ajax({
 				url: 'php_scripts/set_config.php',
 				data: {
 					"which" : $inputs.eq(i).attr("data-key"),
 					"val" : $inputs.eq(i).val()
+				},
+				success: function(e) {
+					onSettingSaveResponse();
+				}, error: function(e) {
+					onSettingSaveResponse();
 				}
 			});
 		}
+	},
 
-		updateSettings();
-		alert("Gespeichert");
-
-		// $("#settings_modal").foundation('close');
+	onSettingSaveResponse = function() {
+		receivedServerResponses++;
+		if(receivedServerResponses == waitingForServerResponses) {
+			updateSettings();
+			alert("Einstellungen gespeichert");
+		}
 	},
 
 	buildStatusInputs = function(e) {
