@@ -3,7 +3,7 @@
 
 	$conn = getDBConnection();
 
-	$queryResults = $conn->query("SELECT media.id,media.title,media.url,media.preview_image,queue.status,queue.position FROM queue LEFT JOIN media ON queue.media_id=media.id ORDER BY queue.position");
+	$queryResults = $conn->query("SELECT media.id,media.assigned_id,media.title,media.url,media.preview_image,media.video_url,queue.status,queue.position FROM queue LEFT JOIN media ON queue.media_id=media.id ORDER BY queue.position");
 
 	$queue = array();
 
@@ -11,9 +11,11 @@
 		while($row = $queryResults->fetch_assoc()) {
 			$queue[] = array(
 				"id" => $row["id"],
+				"assigned_id" => $row["assigned_id"],
 				"title" => utf8_encode($row["title"]),
 				"url" => $row["url"],
 				"preview_img" => $row["preview_image"],
+				"video_url" => $row["video_url"],
 				"status" => $row["status"],
 				"position" => $row["position"]
 			);

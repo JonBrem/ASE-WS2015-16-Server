@@ -18,9 +18,11 @@
 
 			$mediaItems[$row["id"]] = array(
 				"id" => $row["id"],
+				"assigned_id" => $row["assigned_id"],
 				"title" => utf8_encode($row["title"]),
 				"url" => $row["url"],
 				"preview_img" => $row["preview_image"],
+				"video_url" => $row["video_url"],
 				"tags" => array()
 			);		
 		}

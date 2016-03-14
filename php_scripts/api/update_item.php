@@ -20,30 +20,30 @@
 
 		$video = $results->fetch_assoc();
 
-		$sqlUpdate = "UPDATE media SET `video_url`"="\"$video_file_url\",";
+		$sqlUpdate = "UPDATE media SET `video_url`=\"$video_file_url\",";
 
 		if($video_id != null) {
 			$sqlUpdate .= "`assigned_id`=\"$video_id\",";			
 		} else {
-			$sqlUpdate .= "`assigned_id`=null,"
+			$sqlUpdate .= "`assigned_id`=null,";
 		}
 
 		if($title != null) {
 			$sqlUpdate .= "`title`=\"$title\",";			
 		} else {
-			$sqlUpdate .= "`title`=null,"
+			$sqlUpdate .= "`title`=null,";
 		}
 
 		if($url != null) {
 			$sqlUpdate .= "`url`=\"$url\",";			
 		} else {
-			$sqlUpdate .= "`url`=null,"
+			$sqlUpdate .= "`url`=null,";
 		}
 
 		if($preview_image != null) {
 			$sqlUpdate .= "`preview_image`=\"$preview_image\"";			
 		} else {
-			$sqlUpdate .= "`preview_image`=null"
+			$sqlUpdate .= "`preview_image`=null";
 		}
 
 		$sqlUpdate .= " WHERE id=" . $video["id"];
@@ -66,10 +66,10 @@
 							// probably doesn't change, anyways...
 						}
 						$conn->query($sqlUpdate);
-						echo '{"status" : "ok"}';
+						echo '{"status":"ok"}';
 					} else if ($queueStatus == STATUS_IN_QUEUE) {
 						$conn->query($sqlUpdate);
-						echo '{"status" : "ok"}';
+						echo '{"status":"ok"}';
 					} else { // could make more cases if the timing is just right but... no.
 						$conn->close();
 						exit('{"status":"error","message":"cannnot change video while it is being processed"}');
@@ -80,7 +80,7 @@
 				}
 			} else {
 				$conn->query($sqlUpdate);
-				echo '{"status" : "ok"}';
+				echo '{"status":"ok"}';
 			}
 
 
@@ -120,7 +120,7 @@
 	}
 
 	if(array_key_exists("title", $params)) {
-		$title = $params["title"];
+		$title = utf8_decode(urldecode($params["title"]));
 	}
 
 	if(array_key_exists("url", $params)) {

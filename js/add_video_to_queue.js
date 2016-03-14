@@ -39,22 +39,6 @@ var AddVideoHelper = (function() {
 			},
 			error: function(e) {alert(e);}
 		});
-	},
-
-	buildStatusInputs = function(e) {
-		$settingsElement.empty();
-		for(var key in e) {
-			if(key == "queue_status") continue;
-			$settingsItemRow = $("<div class='row'>" +
-				"<div class='small-12 columns'>" + 
-					"<label>" + key + 
-						"<input class='settings_input' data-key='" + key + "' type='text' value='" + e[key] + "'/>" + 
-					"</label>" + 
-					((key in explanations)? ("<p class='help-text'>" + explanations[key] + "</p>") : "") +
-				"</div>" + 
-			"</div>");
-			$settingsElement.append($settingsItemRow);
-		}
 	};
 
 	that.init = init;

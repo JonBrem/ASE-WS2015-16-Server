@@ -3,7 +3,9 @@ var ErrorItemModel = function(data) {
 
 	var viewModel = ViewModel({
 		id: data.id,
+		assigned_id: data.assigned_id,
 		preview_img: data.preview_img,
+		video_url: data.video_url,
    		title: data.title,
    		url: data.url,
    		status: data.status

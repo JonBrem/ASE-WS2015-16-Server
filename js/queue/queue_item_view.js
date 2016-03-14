@@ -51,6 +51,11 @@ var QueueItemView = function(viewModel) {
     		}
     	});
 
+
+        $item.find(".queue_item_edit").on("click", function(e) {
+            EditVideoHelper.showForVideo(viewModelData);
+        });
+
     	appendTo.append($item);
 	};
 

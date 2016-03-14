@@ -14,9 +14,11 @@
 
 			$erroneousItems[] = array(
 				"id" => $error["id"],
+				"assigned_id" => $error["assigned_id"],
 				"title" => utf8_encode($error["title"]),
 				"url" => $error["url"],
 				"preview_img" => $error["preview_image"],
+				"video_url" => $error["video_url"],
 				"status" => $error["status"]
 			);
 		}

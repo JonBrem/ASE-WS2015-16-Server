@@ -3,9 +3,11 @@ var BeingProcessedItemModel = function(data) {
 
 	var viewModel = ViewModel({
 		id: data.id,
+		assigned_id: data.assigned_id,
 		preview_img: data.preview_img,
    		title: data.title,
    		url: data.url,
+		video_url: data.video_url,
    		status: data.status
 	});
 

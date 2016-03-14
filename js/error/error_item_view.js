@@ -60,6 +60,10 @@ var ErrorItemView = function(viewModel) {
     		});
     	});
 
+        $item.find(".error_item_edit").on("click", function(e) {
+            EditVideoHelper.showForVideo(viewModelData);
+        });
+
     	appendTo.append($item);
 	};
 

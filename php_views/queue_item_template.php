@@ -19,6 +19,7 @@
 		<!--__ -->
 		</div>
 		<div class="small-1 large-1 columns queue_item_cancel">
+			<button type="button" class="button queue_item_edit"><i class="fi-pencil"></i></button>
 			<button type="button" class="alert button queue_item_delete"><i class="fi-x"></i></button>
 		</div>
 	</li>

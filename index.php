@@ -16,6 +16,7 @@
 <body>
 
 	<div class="small-12 columns">
+		<?php include("php_views/edit_modal.php"); ?>
 
 		<div class="row title_area">
 			<div class="small-12 columns" style="padding: 0">
@@ -152,6 +153,7 @@
 
 	<script type="text/javascript" src="js/settings.js"></script>
 	<script type="text/javascript" src="js/add_video_to_queue.js"></script>
+	<script type="text/javascript" src="js/edit_video.js"></script>
 
 	<script>
 		$(document).foundation();
