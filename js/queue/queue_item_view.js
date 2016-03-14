@@ -30,6 +30,26 @@ var QueueItemView = function(viewModel) {
     		status: viewModelData.status
     	}}));
 
+    	$item.find('.queue_item_delete').on('click', function(e) {
+    		var x = confirm("Möchten Sie das Video " + viewModelData.title + " wirklich löschen?");
+
+    		if(x) {
+    			$.ajax({
+    				url: 'php_scripts/api/delete_video.php',
+    				type: 'GET',
+    				data: {
+    					'id_type' : 'db_id',
+    					'id_value' : viewModelData.id
+    				},
+    				success: function(e) {
+    					if(e.status != "ok") {
+    						alert(e.message);
+    					}
+    					Queue.updateQueue();
+    				},error: function(e) {console.log(e);}
+    			});    			
+    		}
+    	});
 
     	appendTo.append($item);
 	};

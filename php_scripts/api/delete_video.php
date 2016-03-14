@@ -40,11 +40,17 @@
 					}
 				}
 
+				$conn->query("DELETE FROM queue WHERE media_id=\"" . $video["id"] . "\"");
+				$conn->query("DELETE FROM media WHERE id=\"" . $video["id"] . "\"");
+				// maybe fix positions (but that happens in runscript anyway...)
 			} else if ($video["status"] == STATUS_HISTORY ) {
 				$conn->query("DELETE FROM tags WHERE media_id=" . $video["id"]);
+				$conn->query("DELETE FROM media WHERE id=\"" . $video["id"] . "\"");
+			} else {
+				$conn->query("DELETE FROM media WHERE id=\"" . $video["id"] . "\"");
 			}
 
-			$conn->query("DELETE FROM queue WHERE media_id=\"" . $video["id"] . "\"");
+			echo '{"status":"ok"}';
 
 		} else {
 			echo '{"status":"error","message":"found no video for given id_value"}';			

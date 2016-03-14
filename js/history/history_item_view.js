@@ -24,6 +24,24 @@ var HistoryItemView = function(viewModel) {
     	$tagsWrapper = $item.find('.history_item_tags');
     	updateTags();
 
+    	$item.find('.history_item_delete').on('click', function(e) {
+    		var x = confirm("Möchten Sie das Video " + viewModelData.title + " wirklich löschen?");
+
+    		if(x) {
+    			$.ajax({
+    				url: 'php_scripts/api/delete_video.php',
+    				type: 'GET',
+    				data: {
+    					'id_type' : 'db_id',
+    					'id_value' : viewModelData.id
+    				},
+    				success: function(e) {
+    					History.updateHistory();
+    				},error: function(e) {console.log(e);}
+    			});    			
+    		}
+    	});
+
     	appendTo.append($item);
 	};
 

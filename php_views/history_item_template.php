@@ -3,7 +3,7 @@
 		<div class="small-2 large-3 columns history_item_image_wrapper">
 			<img class="thumbnail" src="<?php include('check_image_template.php');?>" />
 		</div>
-		<div class="small-5 large-5 columns history_item_info">
+		<div class="small-4 large-4 columns history_item_info">
 			<div class="row">
 				<div class="small-12 columns history_item_title">					
 					<?php include('check_title_template.php'); ?>
@@ -17,6 +17,10 @@
 		</div>
 
 		<div class="small-5 large-4 columns history_item_tags">
+		</div>
+
+		<div class="small-1 large-1 columns history_item_cancel">
+			<button type="button" class="alert button history_item_delete"><i class="fi-x"></i></button>
 		</div>
 
 	</li>

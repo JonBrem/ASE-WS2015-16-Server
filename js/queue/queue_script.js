@@ -246,7 +246,7 @@ var Queue = (function() {
 	};
 
 	publ.init_queue = init_queue;
-
+	publ.updateQueue = updateQueue;
 
 	return publ;
 })();

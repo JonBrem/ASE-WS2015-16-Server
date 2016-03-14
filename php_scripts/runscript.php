@@ -25,11 +25,11 @@
 
 				$conn = getDBConnection();
 
-				if($this->wasProbablyInterrupted($lastRunTime)) {
-					$this->resetStatus($conn);
-				}
-
 				if(!$conn->connect_error) {
+					if($this->wasProbablyInterrupted($lastRunTime)) {
+						$this->resetStatus($conn);
+					}
+
 					$this->checkQueueErrors($conn);
 					$this->checkCurrentTextRecognition($conn);
 					$this->checkQueue($conn);
@@ -255,11 +255,13 @@
 		}
 
 		/**
-		 * If enough items are in the queue, this does nothing.
+		 * If enough items are in the queue, this does nothing except (maybe) fix the sorting of the items.
 		 * If there are any unprocessed items in the media table and less than 10 in the queue,
 		 * this method will add those to the queue.
 		 */
 		private function checkQueue($conn) {
+			$this->fixQueueItemPositions($conn);
+
 			$numOfItemsInQueue = $this->getNumOfItemsInQueue($conn);
 			if($numOfItemsInQueue < 10) {
 				$items = $this->getNextItemsForQueue($conn, 10 - $numOfItemsInQueue, $numOfItemsInQueue);
