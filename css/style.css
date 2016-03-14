@@ -90,6 +90,10 @@ body {
 	letter-spacing: 0.8px;
 }
 
+.accordion-title * {
+	color: #20aaaa;
+}
+
 .accordion-title:focus, .accordion-title:hover {
 	background-color: #303030;
 }

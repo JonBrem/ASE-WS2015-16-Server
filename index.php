@@ -23,8 +23,9 @@
 				<nav data-sticky-container>
 					<div class="sticky" id="main_nav_wrapper" data-sticky data-margin-top="0" style="width:100%;">
 						<nav id="main_nav">
-							<div class="small-11 large-3 columns" data-equalizer-watch>
-								<h2>Texterkennungstool</h2>
+							<div class="small-11 large-8 columns" data-equalizer-watch>
+								<h2>Texterkennungstool: Administration</h2>
+								<small style="float: right">benutzt bing.com &amp; canoo.net</small>
 							</div>			
 						</nav>
 					</div>
@@ -47,7 +48,7 @@
 
 				<ul class="accordion sections" data-accordion data-multi-expand="true" data-allow-all-closed="true">
 					<li class="accordion-item" data-accordion-item>
-						<a href="#" class="accordion-title">Fehlerhafte Einträge</a>
+						<a href="#" class="accordion-title">Fehlerhafte Einträge <span id="errors_title_addition"></span></a>
 						<div class="accordion-content error_area" id="error_area" data-tab-content>
 							<div class="row">
 								<div class="small-12 large-12 columns callout">
@@ -61,7 +62,7 @@
 					</li>
 
 					<li class="accordion-item is-active" data-accordion-item>
-						<a href="#" class="accordion-title">In Verarbeitung</a>
+						<a href="#" class="accordion-title">In Verarbeitung <small id="process_title_addition" style="font-size: 8pt"></small></a>
 						<div class="accordion-content processing_area" id="processing_area" data-tab-content>
 							<div class="row">
 								<div class="small-12 large-12 columns callout">
@@ -77,7 +78,7 @@
 
 
 					<li class="accordion-item is-active" data-accordion-item>
-						<a href="#" class="accordion-title">Warteschlange</a>					
+						<a href="#" class="accordion-title">Warteschlange <span id="queue_title_addition"></span></a>					
 						<div class="accordion-content queue_area" id="queue_area" data-tab-content>
 							<div class="row">
 								<div class="small-12 large-12 columns callout">
@@ -100,7 +101,7 @@
 					</li>
 
 					<li class="accordion-item" data-accordion-item>
-						<a href="#" class="accordion-title">Fertig</a>					
+						<a href="#" class="accordion-title">Fertig <span id="history_title_addition"></span></a>					
 						<div class="history_area accordion-content" id="history_area" data-tab-content>
 							<div class="row">
 								<div class="small-12 large-12 columns callout">

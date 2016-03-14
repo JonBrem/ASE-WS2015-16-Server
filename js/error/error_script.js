@@ -51,6 +51,8 @@ ErroneousItems = (function() {
 				view.create($("#error_list"));
 			}
 		}		
+
+		$("#errors_title_addition").text("(" + e.length + ")");
 	},
 
 	destroyItemsIfNecessary = function(e) {

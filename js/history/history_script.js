@@ -31,6 +31,8 @@ var History = (function() {
 	},
 
 	updateOrCreateItems = function(e) {
+		$("#history_title_addition").text("(" + e.length + ")");
+
 		for(var i = 0; i < e.length; i++) {
 			var alreadyExisted = false;
 

@@ -68,7 +68,7 @@ var HistoryItemView = function(viewModel) {
 		var $tagElement = $(e.target);
 
 		$.ajax({
-			url: 'php_scripts/accept_decline_tag.php',
+			url: 'php_scripts/api/accept_decline_tag.php',
 			type: 'GET',
 			data: {
 				"id" : $tagElement.attr("data-id"),

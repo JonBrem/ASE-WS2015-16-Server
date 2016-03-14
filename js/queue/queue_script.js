@@ -80,6 +80,7 @@ var Queue = (function() {
 		}		
 
 		if(itemBeingProcessed == 0) showThatNoItemIsBeingProcessed();
+		$("#queue_title_addition").text("(" + (e.length - itemBeingProcessed) + ")");
 
 		for(var i = 0; i < e.length; i++) {
 			if(e[i].status != "downloaded" && e[i].status != "downloading" && e[i].status != "in_queue" && e[i].status != "download_error") {				
@@ -122,8 +123,10 @@ var Queue = (function() {
 			itemInProcess = BeingProcessedItemModel(item);
 			itemInProcessView = BeingProcessedItemView(itemInProcess.getViewModel());
 			itemInProcessView.create($("#being_processed_item_wrapper"));
+			$("#process_title_addition").text($(".being_processed_item_status").text());
 		} else {
 			itemInProcess.update(item);
+			$("#process_title_addition").text($(".being_processed_item_status").text());
 		}
 	},
 
@@ -133,6 +136,7 @@ var Queue = (function() {
 			itemInProcess = undefined;
 		}
 		$("#being_processed_item_wrapper").html("Momentan wird kein Bild verarbeitet");
+		$("#process_title_addition").text("");
 	},
 
 	destroyItemsIfNecessary = function(e) {
