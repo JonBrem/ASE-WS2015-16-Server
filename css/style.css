@@ -75,11 +75,39 @@ body {
 	padding-top: 0;
 	padding-bottom: 0;
 	background-color: #202020;
+	border: none;
+}
+
+.accordion {
+	background: #202020;
+	border-color: #555;
+}
+
+.accordion-title {
+	font-size: 14pt;
+	color: #20aaaa;
+	border-bottom-color: #777;
+	letter-spacing: 0.8px;
+}
+
+.accordion-title:focus, .accordion-title:hover {
+	background-color: #303030;
+}
+
+:last-child>.accordion-title {
+	border-bottom-width: 1px;
+}
+
+.accordion-content {
+	background: #202020;
+	border-bottom-color: #555;
+}
+.accordion-title:focus, .accordion-title:hover {
+	color: #30cccc;
 }
 
 .section_header {
 	height: 60px;
-	border-bottom: 1px solid #ccc;
 }
 
 .section_header h3 {
@@ -143,13 +171,13 @@ body {
 	color: #cc6666;
 }
 
-/* queue list styles */
+/* queue list styles, error list styles */
 
-#queue_list {
+#queue_list, #error_list {
 	list-style-type: none;
 }
 
-#queue_list li {
+#queue_list li, #error_list li {
     border-top: 1px dashed #ccc;
     border-bottom: 1px dashed #ccc;
     padding-left: 0;
@@ -161,20 +189,20 @@ body {
     overflow-y: hidden;
 }
 
-#queue_list li:first-child {
+#queue_list li:first-child, #error_list li:first-child {
 	border-top: none;
 }
 
 .being_processed_item {
 	padding-top: 10px;
-	background-color: #303030;
+	background-color: #202020;
 }
 
 .being_processed_item *:not(a) {
 	color: #999;
 }
 
-#queue_list li:last-child {
+#queue_list li:last-child, #error_list li:last-child {
 	border-bottom: none;
 }
 
@@ -192,15 +220,16 @@ body {
 	font-weight: bold;
 }
 
-#queue_list li .thumbnail, .being_processed_item .thumbnail, .history_list_item .thumbnail {
+#queue_list li .thumbnail, .being_processed_item .thumbnail, .history_list_item .thumbnail, #error_list li .thumbnail {
 	max-height: 120px;
 }
 
-#queue_list li .thumbnail:hover, #queue_list li .thumbnail:active {
+#queue_list li .thumbnail:hover, #queue_list li .thumbnail:active, 
+#error_list li .thumbnail:hover, #error_list li .thumbnial:active {
 	box-shadow: 0 0 0 1px rgba(10,10,10,.2);
 }
 
-.queue_item_title, .being_processed_item_title {
+.queue_item_title, .being_processed_item_title, .error_item_title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; 
@@ -209,7 +238,7 @@ body {
 	color: #666;
 }
 
-.queue_item_status, .being_processed_item_status {
+.queue_item_status, .being_processed_item_status, .error_item_status {
 	text-align: center;
 }
 
@@ -223,20 +252,14 @@ body {
 	color: #009000;
 }
 
-.queue_item_status small, {
+.queue_item_status small, .being_processed_item small, .error_item small {
 	color: #999;
-	display: block;
-}
-
-.being_processed_item small {
-	color: #333;
 	display: block;
 }
 
 .being_processed_item i {
 	font-size: 40px;
 }
-
 
 /* history styles */
 

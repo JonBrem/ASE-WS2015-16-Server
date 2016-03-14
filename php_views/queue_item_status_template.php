@@ -14,6 +14,12 @@
 					<small>Video-Download vollständig</small>
 				</div>
 			<%
+		} else if(item.status=="in_queue") {
+			%>
+				<div class="queue_item_status queue_item_waiting">
+					<small style="color: #777">in Warteschlange</small>
+				</div>
+			<%
 		} else {
 
 		}

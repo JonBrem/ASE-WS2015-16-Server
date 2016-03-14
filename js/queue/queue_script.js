@@ -102,16 +102,16 @@ var Queue = (function() {
 		var itemBeingProcessed = 0;
 
 		for(var i = 0; i < e.length; i++) {
-			if(e[i].status != "downloaded" && e[i].status != "downloading" && e[i].status != "in_queue") {				
+			if(e[i].status != "downloaded" && e[i].status != "downloading" && e[i].status != "in_queue" && e[i].status != "download_error") {				
 				itemBeingProcessed = 1;
 				showItemInProcess(e[i]);
 			}
 		}		
 
-		if(itemBeingProcessed == 0 && itemInProcess != undefined) showThatNoItemIsBeingProcessed();
+		if(itemBeingProcessed == 0) showThatNoItemIsBeingProcessed();
 
 		for(var i = 0; i < e.length; i++) {
-			if(e[i].status != "downloaded" && e[i].status != "downloading" && e[i].status != "in_queue") {				
+			if(e[i].status != "downloaded" && e[i].status != "downloading" && e[i].status != "in_queue" && e[i].status != "download_error") {				
 				for(var j = 0; j < queueItemModels.length; j++) {
 					if(queueItemModels[j].getId() == e[i].id) queueItemModels[j].remove();
 				}

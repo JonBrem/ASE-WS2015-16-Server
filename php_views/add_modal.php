@@ -40,7 +40,7 @@
 		<div class="row">
 			<div class="small-12 columns">
 				<label>
-					Video-Datei-Url (video_file_url)
+					<strong>Video-Datei-Url (video_file_url) (*)</strong>
 					<input type="text" id="add_modal_input_video_file_url" />
 				</label>
 				<p class="help-text">URL der .mp4-Datei auf einem Server. Muss angegeben werden.</p>
