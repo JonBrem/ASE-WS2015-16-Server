@@ -57,7 +57,7 @@
 			$results = $conn->query('SELECT * FROM queue WHERE `status` IN ("' . STATUS_BEING_PROCESSED . '","' . STATUS_SEGMENTING_VIDEO . '","' . STATUS_EVALUATING_WORDS . '","' . STATUS_DOWNLOADING . '")');
 
 			if($results->num_rows > 0) {
-				while($result = $results->fetch_assoc() != null) {
+				while(($result = $results->fetch_assoc()) != null) {
 					$newStatus = null;
 					if ($result["status"] == STATUS_BEING_PROCESSED) $newStatus = STATUS_FINISHED_SEGMENTING_VIDEO;
 					else if ($result["status"] == STATUS_SEGMENTING_VIDEO) $newStatus = STATUS_DOWNLOADED;
@@ -458,8 +458,10 @@
 
 	$mediaTextRecognitionLogic = new MediaTextRecognitionLogic();
 
-	if(isset($_GET) && array_key_exists("reset_status", $_GET)) {
-		$mediaTextRecognitionLogic->resetStatus(getDBConnection());
+	if(isset($_GET) && array_key_exists("reset_status", $_GET) && $_GET["reset_status"] == 1) {
+		$conn = getDBConnection();
+		$mediaTextRecognitionLogic->resetStatus($conn);
+		$conn->close();
 	}
 
 	while(true) {
