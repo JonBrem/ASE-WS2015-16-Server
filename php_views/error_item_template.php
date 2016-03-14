@@ -17,10 +17,9 @@
 		<div class="small-3 large-2 columns error_item_status">
 		<!--__ -->
 		</div>
-		<div class="small-1 large-1 columns error_item_retry">
-			<button type="button" class="alert button error_item_retry"><i class="fi-x"></i></button>
-		</div>
-		<div class="small-1 large-1 columns error_item_cancel">
+		<div class="small-2 large-2 columns error_item_options">
+			<button type="button" class="button error_item_edit"><i class="fi-pencil"></i></button>
+			<button type="button" class="warning button error_item_retry"><i class="fi-loop"></i></button>
 			<button type="button" class="alert button error_item_delete"><i class="fi-x"></i></button>
 		</div>
 	</li>

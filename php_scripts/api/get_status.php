@@ -11,6 +11,7 @@
 		$results = loadForIdTypeAndIdValue($id_type, $id_value, $conn);
 
 		if($results == null) {
+			$conn->close();
 			exit('{"status":"error","message":"invalid id_type"}');
 		}
 
@@ -20,6 +21,7 @@
 			echo '{"status" : "ok", "video_status" : "' . $video['status'] . '"}';
 
 		} else {
+			$conn->close();
 			exit('{"status":"error","message":"found no video for given id_value"}');			
 		}
 

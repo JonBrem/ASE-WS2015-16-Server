@@ -26,6 +26,39 @@ var ErrorItemView = function(viewModel) {
     		status: viewModelData.status
     	}}));
 
+    	$item.find(".error_item_delete").on("click", function(e) {
+    		var x = confirm("Möchten Sie das Video " + viewModelData.title + " wirklich löschen?");
+
+    		if(x) {
+    			$.ajax({
+    				url: 'php_scripts/api/delete_video.php',
+    				type: 'GET',
+    				data: {
+    					'id_type' : 'db_id',
+    					'id_value' : viewModelData.id
+    				},
+    				success: function(e) {
+    					ErroneousItems.updateErrorList();
+    				},error: function(e) {console.log(e);}
+    			});    			
+    		}    		
+    	});
+
+    	$item.find(".error_item_retry").on("click", function(e) {
+    		$.ajax({
+    			url: 'php_scripts/api/try_video_again.php',
+    			type: 'GET',
+    			dataType: 'json',
+    			data: {"id_type" : "db_id", "id_value" : viewModelData.id},
+    			success: function(e) {
+    				if(e.status != "ok") {
+    					alert(e.message);
+    				}
+    				ErroneousItems.updateErrorList();
+    				Queue.updateQueue();	
+    			},error: function(e) {console.log(e);}
+    		});
+    	});
 
     	appendTo.append($item);
 	};
