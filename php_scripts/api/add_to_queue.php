@@ -1,58 +1,5 @@
 <?php
-	require_once("../util/config.php");
-	require_once("../util/status_codes.php");
-	require_once("../util/db_connection.php");
-
-	function add_to_queue($video_file_url, $video_id = null, $title = null, $url = null, $preview_image = null) {
-		$conn = getDBConnection();
-
-		$sqlColumns = "video_url";
-		$sqlValues = "\"$video_file_url\"";
-
-		if($video_id != null) {
-			$sqlColumns .= ",assigned_id";	
-			$sqlValues .= ",\"$video_id\"";			
-		}
-		if($title != null) {
-			$sqlColumns .= ",title";	
-			$sqlValues .= ",\"$title\"";			
-		}
-		if($url != null) {
-			$sqlColumns .= ",url";	
-			$sqlValues .= ",\"$url\"";			
-		}
-		if($preview_image != null) {
-			$sqlColumns .= ",preview_image";	
-			$sqlValues .= ",\"$preview_image\"";			
-		}
-
-		$sqlColumns .= ",status";
-		$sqlValues .= ",\"" . STATUS_IN_QUEUE . "\"";
-
-		try {
-			$conn->query("INSERT INTO media ($sqlColumns) VALUES ($sqlValues)");
-			$generatedId = $conn->insert_id;
-
-			if($generatedId != 0) {
-
-				$queueItem = $conn->query("SELECT * FROM queue WHERE 1 ORDER BY position DESC");
-
-				if($queueItem->num_rows > 0) {
-					$result = $queueItem->fetch_assoc();
-					$position = intval($result["position"]) + 1;
-					$conn->query("INSERT INTO queue (media_id,position,status) VALUES ($generatedId,$position,\"" . STATUS_IN_QUEUE . "\")");
-				} else {
-					$conn->query("INSERT INTO queue (media_id,position,status) VALUES ($generatedId,1,\"" . STATUS_IN_QUEUE . "\")");
-				}
-
-				echo '{"status":"ok"}';
-			}
-
-		} catch(Exception $e) {
-			exit($e);
-		}
-		$conn->close();
-	}
+	require_once("api.php");
 
 	$videoFileUrl = null;
 	$assignedId = null;
@@ -83,4 +30,5 @@
 		$previewImage = $params["preview_image"];
 	}
 
-	add_to_queue($videoFileUrl, $assignedId, $title, $url, $previewImage);
+	$api = new TextRecognitionAPI();
+	$api->add_to_queue($videoFileUrl, $assignedId, $title, $url, $previewImage);

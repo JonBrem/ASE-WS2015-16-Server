@@ -1,16 +1,8 @@
 <?php
-	require_once('../set_config.php');
 
-	function setQueueStatus($run) {
-		if($run === "true" || $run === "1" || $run == "running") {
-			set(CONFIG_QUEUE_STATUS, "running");
-		} else if($run === "false" || $run === "0" || $run == "stop") {
-			set(CONFIG_QUEUE_STATUS, "stop");
-		} else {
-			exit('{"status":"error", "message" : "invalid value"}');
-		}
-
-		echo '{"status":"ok"}';
+	if(!array_key_exists("queue_status", $_GET)) {
+		exit('{"status" : "error", "message" : "queue_status needs to be set"}');
 	}
 
-	setQueueStatus($_GET["queue_status"]);
+	$api = new TextRecognitionAPI();
+	$api->set_queue_status($_GET["queue_status"]);
