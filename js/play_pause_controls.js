@@ -1,9 +1,15 @@
 jQuery(document).ready(function($) {
-	$("#control_play").on("click", function(e) {onPlayPauseControlClick(true);});
+	$("#control_play").on("click", function(e) {
+		onPlayPauseControlClick(true);
+		activateRunscript();	
+	});
 	$("#control_stop").on("click", function(e) {onPlayPauseControlClick(false);});
 
 	getRunningStatus();
 	setInterval(getRunningStatus, 2000);
+
+	retrieveLastExecuted();
+	setInterval(retrieveLastExecuted, 2000);
 });
 	
 
@@ -22,6 +28,27 @@ jQuery(document).ready(function($) {
 			},
 			success: function(e) {getRunningStatus();},
 			error: function(e) {getRunningStatus();}
+		});
+	}
+
+	/**
+	 * Activates the runscript. If the main routine / runscript was already up and running, this does nothing anyway, so extra calls don't hurt.
+	 */
+	function activateRunscript() {
+		$.ajax({
+			url: 'php_scripts/runscript.php'
+		});
+	}
+
+	/**
+	 * Shows when the Script was last executed.
+	 */
+	function retrieveLastExecuted() {
+		$.ajax({
+			url: 'php_scripts/get_last_execution_time.php',
+			success: function(e) {
+				$("#last_executed").text(new Date(Number.parseInt(e)));
+			},
 		});
 	}
 

@@ -23,7 +23,7 @@
 				<nav data-sticky-container>
 					<div class="sticky" id="main_nav_wrapper" data-sticky data-margin-top="0" style="width:100%;">
 						<nav id="main_nav">
-							<div class="small-11 large-8 columns" data-equalizer-watch>
+							<div class="small-11 large-8 columns">
 								<h2>Texterkennungstool: Administration</h2>
 								<small style="float: right">benutzt bing.com &amp; canoo.net</small>
 							</div>			
@@ -37,13 +37,22 @@
 			<div class="small-12 columns">
 
 				<div class="stop_play_controls">
-					<span style="font-size: 12pt; color: #777">Status des Tools:</span> 
-					<span class="stop_play_control">
-						<i class="fi-play has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Warteschlange abarbeiten, Skripte ausführen" id="control_play"></i>
-					</span>
-					<span class="stop_play_control">
-						<i class="fi-stop has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Nichts mehr tun (wird erst nach Fertigstellung der aktuellen Schritte aktiv)" id="control_stop"></i>
-					</span>
+					<div class="row">
+						<div class="small-12 columns">
+							<span style="font-size: 12pt; color: #777">Status des Tools:</span> 
+							<span class="stop_play_control">
+								<i class="fi-play has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Warteschlange abarbeiten, Skripte ausführen" id="control_play"></i>
+							</span>
+							<span class="stop_play_control">
+								<i class="fi-stop has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Nichts mehr tun (wird erst nach Fertigstellung der aktuellen Schritte aktiv)" id="control_stop"></i>
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="small-12 columns" id="last_exeuted_wrapper">
+							<small>Hauptroutine zuletzt ausgeführt: <span id="last_executed"></span></small>
+						</div>
+					</div>
 				</div>
 
 				<ul class="accordion sections" data-accordion data-multi-expand="true" data-allow-all-closed="true">
