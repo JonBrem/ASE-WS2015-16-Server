@@ -30,8 +30,8 @@ class TextRecognitionAPI {
 	/**
 	 * Prints the tags for the specified video. 
 	 *
-	 * @param $id_type see {@link #loadForIdTypeAndIdValue}
-	 * @param $id_value see {@link #loadForIdTypeAndIdValue}
+	 * @param $id_type see {@link loadForIdTypeAndIdValue}
+	 * @param $id_value see {@link loadForIdTypeAndIdValue}
 	 * @param $with_id
 	 * <ol><li>0: results are returned as two String arrays (one for all tags and one for only the accepted tags); default value</li>
 	 *<li>1: results are returned in one array as JSON-Objects {id: , value: , accepted: } </li></ol>
@@ -129,8 +129,8 @@ class TextRecognitionAPI {
 	/**
 	 * Updates the video data. 
 	 * 
-	 * @param $id_type see {@link #loadForIdTypeAndIdValue}
-	 * @param $id_value see {@link #loadForIdTypeAndIdValue}
+	 * @param $id_type see {@link loadForIdTypeAndIdValue}
+	 * @param $id_value see {@link loadForIdTypeAndIdValue}
 	 * 
 	 * @param $video_file_url the URL of the video file (probably http://something.something/something.mp4)
 	 * @param $video_id assigned id of the video (for later retrieval) (optional)
@@ -183,8 +183,8 @@ class TextRecognitionAPI {
 	 * Deletes the video from the database.
 	 * May not be possible if the video is currently in the queue and being processed or downloaded at that moment. 
 	 *
-	 * @param $id_type see {@link #loadForIdTypeAndIdValue}
-	 * @param $id_value see {@link #loadForIdTypeAndIdValue}
+	 * @param $id_type see {@link loadForIdTypeAndIdValue}
+	 * @param $id_value see {@link loadForIdTypeAndIdValue}
 	 */
 	public function delete_video($id_type, $id_value) {
 		$conn = getDBConnection();
@@ -245,8 +245,8 @@ class TextRecognitionAPI {
 	 * Uses the status in the media table if the item is not in the queue
 	 * and the status in the queue table if it is.
 	 * 
-	 * @param $id_type see {@link #loadForIdTypeAndIdValue}
-	 * @param $id_value see {@link #loadForIdTypeAndIdValue}
+	 * @param $id_type see {@link loadForIdTypeAndIdValue}
+	 * @param $id_value see {@link loadForIdTypeAndIdValue}
 	 */
 	public function get_status($id_type, $id_value) {
 		$conn = getDBConnection();
@@ -286,8 +286,8 @@ class TextRecognitionAPI {
 	 * you can try processing it again and append it to the queue again using this api method.
 	 * Alternatively, you could delete it and add it again.
 	 *
-	 * @param $id_type see {@link #loadForIdTypeAndIdValue}
-	 * @param $id_value see {@link #loadForIdTypeAndIdValue}
+	 * @param $id_type see {@link loadForIdTypeAndIdValue}
+	 * @param $id_value see {@link loadForIdTypeAndIdValue}
 	 */
 	public function try_video_again($id_type, $id_value) {
 		$conn = getDBConnection();

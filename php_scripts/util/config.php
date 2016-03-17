@@ -32,7 +32,6 @@
 			}
 		} else {
 			$conn->query("UPDATE config SET value=\"$val\" WHERE name=\"$which\"");
-
 		}
 
 		$conn->close();

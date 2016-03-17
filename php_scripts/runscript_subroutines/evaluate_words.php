@@ -9,8 +9,8 @@
 	$javaExec = $_GET["java_exec_path"];
 	$javaToolFolder = $_GET["java_tool_folder"];
 
-	/**!
-	 * runscript subroutine!
+	/**
+	 * !runscript subroutine!
 	 * <br>
 	 * Selects the most common/probable words from the recognized text and
 	 * proposes them as tags for the video file.
@@ -32,7 +32,7 @@
 		// var_dump($out);
 
 		$conn = getDBConnection();
-		addTags($mediaID, $outputFile, $conn);
+		evaluteWords_addTags($mediaID, $outputFile, $conn);
 
 		if(file_exists($outputFile)) {
 			$conn->query("UPDATE queue SET status=\"" . STATUS_READY_FOR_HISTORY . "\" WHERE media_id=$mediaID");
@@ -43,13 +43,14 @@
 	}
 
 	/**
-	 * adds up to 5 tags from the newly created file to the video.
+	 * decomposition method for {@link evaluateWords}
+	 * adds all the tags from the newly created file to the video.
 	 * 
 	 * @param $mediaID the ID of the video item
 	 * @param tagsFile path to the file the java executable created
 	 * @param $conn open SQL conneciton
 	 */
-	function addTags($mediaID, $tagsFile, $conn) {
+	function evaluteWords_addTags($mediaID, $tagsFile, $conn) {
 		$handle = fopen($tagsFile, "r");
 		if ($handle) {
 		    while (($line = fgets($handle)) !== false) {

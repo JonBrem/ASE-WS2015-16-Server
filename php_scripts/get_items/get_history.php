@@ -2,59 +2,67 @@
 	require_once("../util/db_connection.php");
 	require_once("../util/status_codes.php");
 
-	$conn = getDBConnection();
+	/**
+	 * Retrieves data & tags for all the videos that have been fully processed.
+	 * @return format: JSON array, items: {id: , assigned_id: , title: , url: , preview_img: , vieo_url: , status: , tags: [{id: , content: , accepted: }]}
+	 */
+	function get_history() {
+		$conn = getDBConnection();
 
-	$sqlResult = $conn->query("SELECT * FROM media WHERE status=\"" . STATUS_HISTORY . "\" ORDER BY id DESC");
+		$sqlResult = $conn->query("SELECT * FROM media WHERE status=\"" . STATUS_HISTORY . "\" ORDER BY id DESC");
 
-	// build media ID string for later, set up media items array
-	// array indizes = media id (so we don't have so many loops later :) )
+		// build media ID string for later, set up media items array
+		// array indizes = media id (so we don't have so many loops later :) )
 
-	$mediaIDs = "(";
-	$mediaItems = array();
+		$mediaIDs = "(";
+		$mediaItems = array();
 
-	if($sqlResult->num_rows > 0) {
-		while($row = $sqlResult->fetch_assoc()) {
-			$mediaIDs .= $row["id"] . ",";
+		if($sqlResult->num_rows > 0) {
+			while($row = $sqlResult->fetch_assoc()) {
+				$mediaIDs .= $row["id"] . ",";
 
-			$mediaItems[$row["id"]] = array(
-				"id" => $row["id"],
-				"assigned_id" => $row["assigned_id"],
-				"title" => utf8_encode($row["title"]),
-				"url" => $row["url"],
-				"preview_img" => $row["preview_image"],
-				"video_url" => $row["video_url"],
-				"tags" => array()
-			);		
-		}
-	}
-	if(mb_substr($mediaIDs, -1) == ",") {
-		$mediaIDs = substr($mediaIDs, 0, strlen($mediaIDs) - 1); 
-	}
-	$mediaIDs .= ")";
-
-	// query using the media ID string, assign tags to the media items
-
-	if(sizeof($mediaItems) > 0) {
-		$tags = $conn->query("SELECT * FROM tags WHERE media_id IN $mediaIDs");
-		if($tags->num_rows > 0) {
-			while($row = $tags->fetch_assoc()) {
-				// append "object" to the tags array in the media item
-				$mediaItems[$row["media_id"]]["tags"][] = array(
+				$mediaItems[$row["id"]] = array(
 					"id" => $row["id"],
-					"content" => utf8_encode($row["content"]),
-					"accepted" => $row["accepted"]
-				);	
+					"assigned_id" => $row["assigned_id"],
+					"title" => utf8_encode($row["title"]),
+					"url" => $row["url"],
+					"preview_img" => $row["preview_image"],
+					"video_url" => $row["video_url"],
+					"tags" => array()
+				);		
 			}
 		}
+		if(mb_substr($mediaIDs, -1) == ",") {
+			$mediaIDs = substr($mediaIDs, 0, strlen($mediaIDs) - 1); 
+		}
+		$mediaIDs .= ")";
+
+		// query using the media ID string, assign tags to the media items
+
+		if(sizeof($mediaItems) > 0) {
+			$tags = $conn->query("SELECT * FROM tags WHERE media_id IN $mediaIDs");
+			if($tags->num_rows > 0) {
+				while($row = $tags->fetch_assoc()) {
+					// append "object" to the tags array in the media item
+					$mediaItems[$row["media_id"]]["tags"][] = array(
+						"id" => $row["id"],
+						"content" => utf8_encode($row["content"]),
+						"accepted" => $row["accepted"]
+					);	
+				}
+			}
+		}
+
+		$conn->close();
+
+		$arrayToPrint = array();
+
+		foreach($mediaItems as $key => $item) {
+			$arrayToPrint[] = $item;
+		}
+
+		echo json_encode($arrayToPrint);
 	}
 
-	$conn->close();
-
-	$arrayToPrint = array();
-
-	foreach($mediaItems as $key => $item) {
-		$arrayToPrint[] = $item;
-	}
-
-	echo json_encode($arrayToPrint);
+	get_history();
 ?>

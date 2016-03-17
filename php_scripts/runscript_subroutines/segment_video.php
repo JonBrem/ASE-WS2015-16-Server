@@ -26,11 +26,11 @@
 			exit("Datei wurde nicht gefunden.");
 		}
 
-		setupFolder($segmentedVideoPath);
+		segementVideo_setupFolder($segmentedVideoPath);
 
 		$conn->query("UPDATE queue SET status=\"" . STATUS_SEGMENTING_VIDEO . "\" WHERE id=$queueID");
 
-		$ffProbeAndFfMpeg = getFfProbeAndFfMpeg($queueID);
+		$ffProbeAndFfMpeg = segmentVideo_getFfProbeAndFfMpeg($queueID);
 		if(!is_array($ffProbeAndFfMpeg)) exit("Error creating ffmpeg and/or ffprobe.");
 
 		$ffprobe = $ffProbeAndFfMpeg[0];
@@ -56,11 +56,11 @@
 	}
 
 	/**
-	 * Decomposition method for {@link #segmentVideo($mediaID, $queueID, $videoFilePath, $segmentedVideoPath)}; 
+	 * Decomposition method for {@link segmentVideo}; 
 	 * if the video parts folder does not exist, this method creates it.
 	 * If it exists, this method deletes all the files in it.
 	 */
-	function setupFolder($segmentedVideoPath) {
+	function segementVideo_setupFolder($segmentedVideoPath) {
 		// first: delete all files in $segmentedVideoPath
 		$files = glob("$segmentedVideoPath/*"); // get all file names
 		foreach($files as $file){ // iterate files
@@ -75,11 +75,11 @@
 	}
 
 	/**
-	 * Decomposition method for {@link #segmentVideo($mediaID, $queueID, $videoFilePath, $segmentedVideoPath)}; 
+	 * Decomposition method for {@link segmentVideo}; 
 	 * <strong>Will EXIT on error!</strong>
 	 * @return an array with $ffmpeg at index 0 and $ffprobe at index 1
 	 */
-	function getFfProbeAndFfMpeg($queueID) {
+	function segmentVideo_getFfProbeAndFfMpeg($queueID) {
 		$ffprobe = null;
 		$ffmpeg = null;
 

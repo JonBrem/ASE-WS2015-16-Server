@@ -176,7 +176,8 @@
 		}
 
 		/**
-		 *  
+		 * Removes the specified item from the queue, updates its status in the media table (to "history").
+		 * After that is done, updates the positions of the other items in the queue.
 		 */
 		private function moveToHistory($mediaID, $conn) {
 			$conn->query("DELETE FROM queue WHERE media_id=$mediaID");
@@ -185,6 +186,10 @@
 			$this->fixQueueItemPositions($conn);
 		}
 
+		/**
+		 * Removes any gaps in numbering of the items in the queue etc.; previous order will be kept,
+		 * but the numbers will start at 1 and not have gaps.
+		 */
 		private function fixQueueItemPositions($conn) {
 			// update queue item numbers!!
 			$queueItems = $conn->query("SELECT * FROM queue ORDER BY position ASC");
