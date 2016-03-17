@@ -1,29 +1,36 @@
 var processingTemplate = undefined;
 var processStatusTemplate = undefined;
 
-var BeingProcessedItemView = function(viewModel) {
+/**
+ * View for the Videos that is currently being processed.
+ * Like the other three [Something]ItemView class/functions, this
+ * takes data from an AutoUpdateData object and displays it in an underscore template
+ * that it will update when the object registered a change.
+ */
+var BeingProcessedItemView = function(_autoUpdateData) {
 	var publ = {};
 
 	var $item;
 	var $statusEl;
 
-	var viewModelData = viewModel.getData();
+	var viewData = _autoUpdateData.getData();
 
-	$(viewModel).on("change", onViewModelChange);
+	$(_autoUpdateData).on("change", onDataChange);
 
 	var create = function(appendTo) {
     	$item = $(processingTemplate({item: {
-    		id: viewModelData.id,
-    		preview_img: viewModelData.preview_img,
-    		title: viewModelData.title,
-    		url: viewModelData.url,
-    		status: viewModelData.status
+    		id: viewData.id,
+    		preview_img: viewData.preview_img,
+    		title: viewData.title,
+    		url: viewData.url,
+    		status: viewData.status,
+    		assigned_id: viewData.assigned_id
     	}}));
 
     	$statusEl = $item.find(".being_processed_item_progress");
 
     	$statusEl.html(processStatusTemplate({item: {
-    		status: viewModelData.status
+    		status: viewData.status
     	}}));
 
 
@@ -31,7 +38,7 @@ var BeingProcessedItemView = function(viewModel) {
 	};
 
 
-	var onViewModelChange = function(e) {
+	var onDataChange = function(e) {
 		if(e.what == "status") { // nothing else can really change...
 			$statusEl.html(processStatusTemplate({item: {
 				status: e.value
@@ -45,7 +52,7 @@ var BeingProcessedItemView = function(viewModel) {
 		$item.remove();
 	};
 
-	viewModel.registerChangeListener(onViewModelChange);
+	_autoUpdateData.registerChangeListener(onDataChange);
 
 	publ.create = create;
 	publ.destroy = destroy;

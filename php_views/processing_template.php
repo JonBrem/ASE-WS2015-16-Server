@@ -12,6 +12,11 @@
 					<?php include('check_url_template.php'); ?>
 				</div>
 			</div>
+			<div class="row">
+				<div class="small-12 columns being_processed_item_assigned_id">
+					<?php include('check_assigned_id_template.php'); ?>
+				</div>
+			</div>
 		</div>
 
 		<div class="small-3 large-2 columns being_processed_item_progress">

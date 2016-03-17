@@ -1,3 +1,6 @@
+/**
+ * This module handles everything concerning the modal where you can add videos to the queue.
+ */
 var AddVideoHelper = (function() {
 	var that = {},
 	$addVideoModal = undefined,

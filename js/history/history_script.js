@@ -2,6 +2,9 @@ jQuery(document).ready(function($) {
 	History.initHistory();
 });
 
+/**
+ * Main routine for the history / finished items part of the web site.
+ */
 var History = (function() {
 	var that = {},
 	historyItemModels = [],
@@ -47,7 +50,7 @@ var History = (function() {
 			if(!alreadyExisted) {
 				var model = HistoryItemModel(e[i]);
 
-				var view = HistoryItemView(model.getViewModel());
+				var view = HistoryItemView(model.getAutoUpdateData());
 
 				historyItemModels.push(model);
 				view.create($("#history_list"));

@@ -7,6 +7,11 @@ jQuery(document).ready(function($) {
 });
 	
 
+	/**
+	 * Gets called when the play button is clicked. Tries to set the queue status to "running"
+	 * 
+	 * @param on: true => running status will be "running", false => "stop"
+	 */
 	function onPlayPauseControlClick(on) {
 		$.ajax({
 			url: 'php_scripts/set_config.php',
@@ -20,8 +25,9 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-
-
+	/**
+	 * Retrieves the queue status from the server, calls "updateStatusDisplay" if it works.
+	 */
 	function getRunningStatus() {
 		$.ajax({
 			url: 'php_scripts/get_config.php',
@@ -36,6 +42,12 @@ jQuery(document).ready(function($) {
 		});
 	}
 
+	/**
+	 * if "queue_status" key in the param equals "running", the play-button will be highlighted / activated. 
+	 * if not, the stop button will be highlighted / activated.
+	 *
+	 * @param e: Server Response
+	 */
 	function updateStatusDisplay(e) {
 		if(e["queue_status"] == "running") {
 			$("#control_play").addClass('on');

@@ -1,4 +1,11 @@
-var ViewModel = function(modelData) {
+/**
+ * The AutoUpdateData class / function is useful for all the automatic updates the site needs.
+ * <br>This is like an extremely lightweight part of the automatic ViewModel-parts of Frameworks such as Angular
+ * (not anywhere near as complex, but this might explain why we use it.)
+ * <br>Basically, you bind a change listener to it and the AutoUpdateData object tells you what changed when you
+ * give it its new values in the update method.
+ */
+var AutoUpdateData = function(modelData) {
 	var publ = {};
 	var changeListeners = [];
 

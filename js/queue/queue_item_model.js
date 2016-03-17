@@ -1,7 +1,11 @@
-var QueueItemModel = function(data) {
+/**
+ * Model for the items that caused errors when being processed.
+ * Simple data storage class/function, AutoUpdateData wrapper.
+ */
+ var QueueItemModel = function(data) {
 	var publ = {};
 
-	var viewModel = ViewModel({
+	var autoUpdateData = AutoUpdateData({
 		id: data.id,
 		assigned_id: data.assigned_id,
 		number: data.number,
@@ -12,16 +16,12 @@ var QueueItemModel = function(data) {
    		status: data.status
 	});
 
-
-	var onViewModelChange = function(e) {
-	};
-
 	var update = function(newData) {
-		viewModel.update(newData);
+		autoUpdateData.update(newData);
 	};
 
-	var getViewModel = function() {
-		return viewModel;
+	var getAutoUpdateData = function() {
+		return autoUpdateData;
 	};
 
 	var getId = function() {
@@ -29,7 +29,7 @@ var QueueItemModel = function(data) {
 	};
 
 	var remove = function() {
-		viewModel.destroy();
+		autoUpdateData.destroy();
 		publ = undefined;
 	};
 
@@ -37,9 +37,8 @@ var QueueItemModel = function(data) {
 		return data.status;
 	};
 
-	viewModel.registerChangeListener(onViewModelChange);
 	publ.update = update;
-	publ.getViewModel = getViewModel;
+	publ.getAutoUpdateData = getAutoUpdateData;
 	publ.getId = getId;
 	publ.remove = remove;
 	publ.getStatus = getStatus;

@@ -1,7 +1,13 @@
 var history_item_template = undefined; // will be initialized in History
 var tag_template = undefined; // that, too
 
-var HistoryItemView = function(viewModel) {
+/**
+ * View for the Videos for which processing is finished.
+ * Like the other three [Something]ItemView class/functions, this
+ * takes data from an AutoUpdateData object and displays it in an underscore template
+ * that it will update when the object registered a change.
+ */
+var HistoryItemView = function(_autoUpdateData) {
 	var publ = {};
 
 	var $item;
@@ -11,17 +17,18 @@ var HistoryItemView = function(viewModel) {
 		$titleEl,
 		$urlEl;
 
-	var viewModelData = viewModel.getData();
+	var viewData = _autoUpdateData.getData();
 
-	$(viewModel).on("change", onViewModelChange);
+	$(_autoUpdateData).on("change", onViewModelChange);
 
 	var create = function(appendTo) {
     	$item = $(history_item_template({item: {
-    		id: viewModelData.id,
-    		preview_img: viewModelData.preview_img,
-    		title: viewModelData.title,
-    		url: viewModelData.url,
-    		tags: viewModelData.tags
+    		id: viewData.id,
+    		preview_img: viewData.preview_img,
+    		title: viewData.title,
+    		url: viewData.url,
+    		tags: viewData.tags,
+            assigned_id: viewData.assigned_id
     	}}));
 
     	$tagsWrapper = $item.find('.history_item_tags');
@@ -32,7 +39,7 @@ var HistoryItemView = function(viewModel) {
     	updateTags();
 
     	$item.find('.history_item_delete').on('click', function(e) {
-    		var x = confirm("Möchten Sie das Video " + viewModelData.title + " wirklich löschen?");
+    		var x = confirm("Möchten Sie das Video " + viewData.title + " wirklich löschen?");
 
     		if(x) {
     			$.ajax({
@@ -40,7 +47,7 @@ var HistoryItemView = function(viewModel) {
     				type: 'GET',
     				data: {
     					'id_type' : 'db_id',
-    					'id_value' : viewModelData.id
+    					'id_value' : viewData.id
     				},
     				success: function(e) {
     					History.updateHistory();
@@ -54,9 +61,9 @@ var HistoryItemView = function(viewModel) {
 
 	var updateTags = function() {
     	$tagsWrapper.empty();
-    	for(var i = 0; i < viewModelData.tags.length; i++) {
+    	for(var i = 0; i < viewData.tags.length; i++) {
     		var $newTagItem = $(tag_template({
-    			item : viewModelData.tags[i]
+    			item : viewData.tags[i]
     		}));
     		$tagsWrapper.append($newTagItem);
 
@@ -92,6 +99,8 @@ var HistoryItemView = function(viewModel) {
         } else if(e.what == "url") {            
             $urlEl.attr("href", (e.value != null && e.value.length > 0)? e.value : "#");
             $urlEl.text((e.value != null && e.value.length > 0)? "Zur Mediathek" : "kein Link angegeben");
+        } else if (e.what == "assigned_id") {
+            $item.find('.history_item_assigned_id').text((e.value != null && e.value.length > 0)? ("Zugewiesene ID: " + e.value) : "");
         } else if(e.what == "destroy") {
 			destroy();
 		}
@@ -101,7 +110,7 @@ var HistoryItemView = function(viewModel) {
 		$item.remove();
 	};
 
-	viewModel.registerChangeListener(onViewModelChange);
+	_autoUpdateData.registerChangeListener(onViewModelChange);
 
 	publ.create = create;
 	publ.destroy = destroy;

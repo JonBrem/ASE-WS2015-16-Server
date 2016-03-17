@@ -1,7 +1,10 @@
 jQuery(document).ready(function($) {
 	Queue.init_queue();
 });
-// if there is time: make this more fancy (class for QueueItems, Singleton/Module for Queue)
+
+/**
+ * Main routine for the Queue part and "Currently Being Processed" part of the web site.
+ */
 var Queue = (function() {
 
 	var publ = {},
@@ -66,9 +69,6 @@ var Queue = (function() {
 		});
 	},
 
-	/**
-	 *
-	 */
 	updateOrCreateItems = function(e) {
 		var itemBeingProcessed = 0;
 
@@ -103,7 +103,7 @@ var Queue = (function() {
 
 			if(!alreadyExisted) {
 				var model = QueueItemModel(e[i]);
-				var view = QueueItemView(model.getViewModel());
+				var view = QueueItemView(model.getAutoUpdateData());
 
 				queueItemModels.push(model);
 				view.create($("#queue_list"));
@@ -121,7 +121,7 @@ var Queue = (function() {
 			}
 
 			itemInProcess = BeingProcessedItemModel(item);
-			itemInProcessView = BeingProcessedItemView(itemInProcess.getViewModel());
+			itemInProcessView = BeingProcessedItemView(itemInProcess.getAutoUpdateData());
 			itemInProcessView.create($("#being_processed_item_wrapper"));
 			$("#process_title_addition").text($(".being_processed_item_status").text());
 		} else {

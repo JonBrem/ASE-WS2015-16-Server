@@ -129,14 +129,14 @@
 		</div>
 	</div>
 
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="js/underscore.min.js"></script>
-	<script type="text/javascript" src="js/foundation.js"></script>
-	<script type="text/javascript" src="js/what-input.min.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.min.js"></script>
+	<script type="text/javascript" src="js/lib/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/lib/underscore.min.js"></script>
+	<script type="text/javascript" src="js/lib/foundation.js"></script>
+	<script type="text/javascript" src="js/lib/what-input.min.js"></script>
 
 	<!-- own scripts -->
-	<script type="text/javascript" src="js/basic_view_model.js"></script>
+	<script type="text/javascript" src="js/auto_update_data.js"></script>
 
 	<script type="text/javascript" src="js/queue/queue_item_model.js"></script>
 	<script type="text/javascript" src="js/queue/queue_item_view.js"></script>

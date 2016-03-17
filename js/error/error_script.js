@@ -1,3 +1,6 @@
+/**
+ * Main routine for the error items part of the web site.
+ */
 ErroneousItems = (function() {
 	var that = {},
 
@@ -45,7 +48,7 @@ ErroneousItems = (function() {
 			if(!alreadyExisted) {
 				var model = ErrorItemModel(e[i]);
 
-				var view = ErrorItemView(model.getViewModel());
+				var view = ErrorItemView(model.getAutoUpdateData());
 
 				errorItemModels.push(model);
 				view.create($("#error_list"));

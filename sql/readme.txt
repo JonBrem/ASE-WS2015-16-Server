@@ -1,0 +1,1 @@
+Da die Synchronisierung von Datenbanken in XAMPP (oder anderen offline-Servern) problematisch sein kann, benutzen wir diesen Ordner, um sicherzustellen, dass dieselben Tabellen und Datenstrukturen verwendet werden.

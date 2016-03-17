@@ -1,3 +1,8 @@
+/**
+ * This module handles everything concerning the modal where you can edit videos.
+ * Very similar to the part where videos can be added; this "does more" insofar as it inserts the video data
+ * into the input elements before the modal is shown.
+ */
 var EditVideoHelper = (function() {
 	var that = {},
 	$editVideoModal = undefined,

@@ -1,7 +1,13 @@
-var errorTemplate = undefined;
+var errorTemplate = undefined; // will be set up in main error script
 var errorStatusTemplate = undefined;
 
-var ErrorItemView = function(viewModel) {
+/**
+ * View for the Videos that caused errors.
+ * Like the other three [Something]ItemView class/functions, this
+ * takes data from an AutoUpdateData object and displays it in an underscore template
+ * that it will update when the object registered a change.
+ */
+var ErrorItemView = function(_autoUpdateData) {
 	var publ = {};
 
 	var $item;
@@ -10,17 +16,18 @@ var ErrorItemView = function(viewModel) {
         $titleEl,
         $urlEl;
 
-	var viewModelData = viewModel.getData();
+	var viewData = _autoUpdateData.getData();
 
-	$(viewModel).on("change", onViewModelChange);
+	$(_autoUpdateData).on("change", onViewModelChange);
 
 	var create = function(appendTo) {
     	$item = $(errorTemplate({item: {
-    		id: viewModelData.id,
-    		preview_img: viewModelData.preview_img,
-    		title: viewModelData.title,
-    		url: viewModelData.url,
-    		status: viewModelData.status
+    		id: viewData.id,
+    		preview_img: viewData.preview_img,
+    		title: viewData.title,
+    		url: viewData.url,
+    		status: viewData.status,
+            assigned_id: viewData.assigned_id
     	}}));
 
     	$statusEl = $item.find(".error_item_status");
@@ -29,11 +36,11 @@ var ErrorItemView = function(viewModel) {
         $urlEl = $item.find('.error_item_url a');
 
     	$statusEl.html(errorStatusTemplate({item: {
-    		status: viewModelData.status
+    		status: viewData.status
     	}}));
 
     	$item.find(".error_item_delete").on("click", function(e) {
-    		var x = confirm("Möchten Sie das Video " + viewModelData.title + " wirklich löschen?");
+    		var x = confirm("Möchten Sie das Video " + viewData.title + " wirklich löschen?");
 
     		if(x) {
     			$.ajax({
@@ -41,7 +48,7 @@ var ErrorItemView = function(viewModel) {
     				type: 'GET',
     				data: {
     					'id_type' : 'db_id',
-    					'id_value' : viewModelData.id
+    					'id_value' : viewData.id
     				},
     				success: function(e) {
     					ErroneousItems.updateErrorList();
@@ -55,7 +62,7 @@ var ErrorItemView = function(viewModel) {
     			url: 'php_scripts/api/try_video_again.php',
     			type: 'GET',
     			dataType: 'json',
-    			data: {"id_type" : "db_id", "id_value" : viewModelData.id},
+    			data: {"id_type" : "db_id", "id_value" : viewData.id},
     			success: function(e) {
     				if(e.status != "ok") {
     					alert(e.message);
@@ -67,7 +74,7 @@ var ErrorItemView = function(viewModel) {
     	});
 
         $item.find(".error_item_edit").on("click", function(e) {
-            EditVideoHelper.showForVideo(viewModelData);
+            EditVideoHelper.showForVideo(viewData);
         });
 
     	appendTo.append($item);
@@ -86,6 +93,8 @@ var ErrorItemView = function(viewModel) {
         } else if(e.what == "url") {            
             $urlEl.attr("href", (e.value != null && e.value.length > 0)? e.value : "#");
             $urlEl.text((e.value != null && e.value.length > 0)? "Zur Mediathek" : "kein Link angegeben");
+        } else if (e.what == "assigned_id") {
+            $item.find('.error_item_assigned_id').text((e.value != null && e.value.length > 0)? ("Zugewiesene ID: " + e.value) : "");
         } else if (e.what == "destroy") {
 			destroy();
 		}
@@ -95,7 +104,7 @@ var ErrorItemView = function(viewModel) {
 		$item.remove();
 	};
 
-	viewModel.registerChangeListener(onViewModelChange);
+	_autoUpdateData.registerChangeListener(onViewModelChange);
 
 	publ.create = create;
 	publ.destroy = destroy;

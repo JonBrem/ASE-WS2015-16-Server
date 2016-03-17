@@ -1,3 +1,7 @@
+/**
+ * Model that creates the settings input elements when the Settings tab is opened and 
+ * updates them when they are saved.
+ */
 var Settings = (function() {
 	var that = {},
 	$settingsElement = undefined,

@@ -1,0 +1,2 @@
+In diesem Ordner befinden sich Dateien, die zur Decomposition / aus Übersichtlichkeitsgründen aus der Datei index.php entfernt wurden.
+Dabei handelt es sich um größere HTML-Blöcke oder underscore-Templates.

@@ -1,7 +1,11 @@
-var HistoryItemModel = function(data) {
+/**
+ * Model for the items that have been processed.
+ * Simple data storage class/function, AutoUpdateData wrapper.
+ */
+ var HistoryItemModel = function(data) {
 	var publ = {};
 
-	var viewModel = ViewModel({
+	var autoUpdateData = AutoUpdateData({
 		id: data.id,
 		assigned_id: data.assigned_id,
 		preview_img: data.preview_img,
@@ -11,16 +15,12 @@ var HistoryItemModel = function(data) {
    		tags: data.tags
 	});
 
-
-	var onViewModelChange = function(e) {
-	};
-
 	var update = function(newData) {
-		viewModel.update(newData);
+		autoUpdateData.update(newData);
 	};
 
-	var getViewModel = function() {
-		return viewModel;
+	var getAutoUpdateData = function() {
+		return autoUpdateData;
 	};
 
 	var getId = function() {
@@ -28,13 +28,12 @@ var HistoryItemModel = function(data) {
 	};
 
 	var remove = function() {
-		viewModel.destroy();
+		autoUpdateData.destroy();
 		publ = undefined;
 	};
 
-	viewModel.registerChangeListener(onViewModelChange);
 	publ.update = update;
-	publ.getViewModel = getViewModel;
+	publ.getAutoUpdateData = getAutoUpdateData;
 	publ.getId = getId;
 	publ.remove = remove;
 	return publ;

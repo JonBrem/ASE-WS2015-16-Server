@@ -254,6 +254,11 @@ body {
 	color: #666;
 }
 
+.queue_item_assigned_id, .history_item_assigned_id, .error_item_assigned_id, .being_processed_item_assigned_id {
+	font-size: 80%;
+	color: #666;
+}
+
 .queue_item_status, .being_processed_item_status, .error_item_status {
 	text-align: center;
 }
