@@ -164,13 +164,15 @@
 			$outputFilePath = $this->getAbsolutePathOnServer() . "/../video_downloads/output_$mediaID.json";
 			$videosFolder = $this->getAbsolutePathOnServer() . "/../video_downloads";
 			$segmentedVideoPath = "$videosFolder/video_segments";
+			$trainingFilesFolder = $this->getAbsolutePathOnServer . "/../cpp_tool/";
 
 			curl_request_async(
 				$parseVideoScript, 
 				array(
 					"segmented_video_path" => $segmentedVideoPath,
 					"output_file" => $outputFilePath,
-					"media_id" => $mediaID 
+					"media_id" => $mediaID,
+					"training_files_folder" => $trainingFilesFolder
 					), 
 				"GET");
 		}

@@ -36,9 +36,19 @@
 		$ffprobe = $ffProbeAndFfMpeg[0];
 		$ffmpeg = $ffProbeAndFfMpeg[1];
 
-		$videoDuration = $ffprobe
-		    ->format($videoFilePath) // extracts file informations
-		    ->get('duration');             // returns the duration property
+		$videoDuration = null;
+
+		try {
+			$videoDuration = $ffprobe
+			    ->format($videoFilePath) // extracts file informations
+			    ->get('duration');             // returns the duration property
+		} catch (Exception $e) {
+			$conn->query("UPDATE queue SET status=\"" . STATUS_SEGMENTING_ERROR . "\" WHERE id=$queueID");
+			$conn->close();
+			error_log("Error initializing ffmpeg and/or ffprobe.");
+			exit("Error creating ffmpeg and/or ffprobe.");
+		}
+		
 		$video = $ffmpeg->open($videoFilePath);
 
 		// 0.2: analyze 5 FPS

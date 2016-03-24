@@ -41,7 +41,7 @@
 						<div class="small-12 columns">
 							<span style="font-size: 12pt; color: #777">Status des Tools:</span> 
 							<span class="stop_play_control">
-								<i class="fi-play has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Warteschlange abarbeiten, Skripte ausführen" id="control_play"></i>
+								<i class="fi-play has-tip" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Warteschlange abarbeiten, Skripte ausführen. Ein Klick startet außerdem die Hauptroutine, falls sie momentan nicht läuft." id="control_play"></i>
 							</span>
 							<span class="stop_play_control">
 								<i class="fi-stop has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Nichts mehr tun (wird erst nach Fertigstellung der aktuellen Schritte aktiv)" id="control_stop"></i>

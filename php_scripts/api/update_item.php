@@ -21,7 +21,7 @@
 	if(array_key_exists("video_file_url", $params)) {
 		$videoFileUrl = $params["video_file_url"];
 	} else {
-		exit('{"status" : "error", "message" : "key \"video_file_url\" needs to point to the video .mp4 file"}');
+		exit('{"status" : "error", "message" : "key \"video_file_url\" needs to point to the video file"}');
 	}
 
 	if(array_key_exists("video_id", $params)) {
