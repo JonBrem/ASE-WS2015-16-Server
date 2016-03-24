@@ -135,7 +135,7 @@ var Queue = (function() {
 			itemInProcess.remove();
 			itemInProcess = undefined;
 		}
-		$("#being_processed_item_wrapper").html("Momentan wird kein Bild verarbeitet");
+		$("#being_processed_item_wrapper").html("Momentan wird kein Video verarbeitet");
 		$("#process_title_addition").text("");
 	},
 
